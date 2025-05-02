@@ -1,0 +1,37 @@
+<!-- Loader -->
+<app-loader *ngIf="isLoading"></app-loader>
+
+<app-top-bar></app-top-bar>
+<app-main-bar></app-main-bar>
+<app-navbar></app-navbar>
+<app-image-scroller *ngIf="isHomePage"></app-image-scroller>
+<app-about-section *ngIf="isHomePage"></app-about-section>
+<app-notification-board *ngIf="isHomePage"></app-notification-board>
+<app-achievement-glance *ngIf="isHomePage"></app-achievement-glance>
+<router-outlet></router-outlet>
+<app-above-footer></app-above-footer>
+<app-footer></app-footer>
+<!-- Scroll Control Arrows -->
+<div *ngIf="showScrollArrows" class="fixed bottom-6 right-6 flex flex-col items-center z-50 space-y-3">
+  <!-- Down Arrow: Only show when NOT at bottom -->
+  <button
+    *ngIf="!atBottom"
+    (click)="scrollToBottom()"
+    class="bg-blue-600 bg-opacity-70 text-white p-3 rounded-full shadow-lg hover:bg-blue-700 transition"
+    aria-label="Scroll to Bottom"
+  >
+    <fa-icon [icon]="faArrowDown" size="lg"></fa-icon>
+  </button>
+
+  <!-- Up Arrow: Always show when arrows are visible -->
+  <button
+    (click)="scrollToTop()"
+    class="bg-blue-600 bg-opacity-70 text-white p-3 rounded-full shadow-lg hover:bg-blue-700 transition"
+    aria-label="Scroll to Top"
+  >
+    <fa-icon [icon]="faArrowUp" size="lg"></fa-icon>
+  </button>
+</div>
+
+
+
