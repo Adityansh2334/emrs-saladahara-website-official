@@ -1,0 +1,66 @@
+<section class="bg-white py-12 px-4">
+  <div class="max-w-7xl mx-auto">
+    <h2 class="text-3xl font-bold text-center text-gray-800 mb-6" [@fadeInUp]>
+      Empowering Education
+    </h2>
+    <p
+      class="text-center text-lg text-gray-700 max-w-4xl mx-auto mb-10"
+      [@fadeInUp]>
+      In the context of the trend of establishing quality residential schools for promotion of education and ensuring all-round development of tribal students, EMRS Saladahara, Nilgiri, Balasore, Odisha was established in 2020. This boarding school and center of excellence for sports accommodates 90% ST, 10% Non-ST, and PVTG students.
+    </p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+      <!-- Principal Secretary -->
+      <div
+        class="bg-blue-50 p-6 rounded-lg shadow hover:shadow-md transition duration-300"
+        [@fadeInLeft]>
+        <img
+          [src]="principalSecretary.image"
+          [alt]="principalSecretary.name"
+          class="w-full h-80 object-cover object-top rounded-md mb-4"
+        />
+        <p class="text-gray-800 text-base mb-4">
+          {{ principalSecretary.name }}, {{ principalSecretary.designation }},
+          Tribal Development Department, Odisha
+        </p>
+        <a
+          class="read-mr hvr-icon-forward cursor-pointer text-blue-700 font-semibold hover:underline"
+          (click)="openMessage(principalSecretary.name, principalSecretary.message)">
+          Read message
+          <fa-icon [icon]="faArrowRight" class="ml-2 text-blue-700"></fa-icon>
+        </a>
+      </div>
+
+      <!-- Principal In-Charge -->
+      <div
+        class="bg-blue-50 p-6 rounded-lg shadow hover:shadow-md transition duration-300"
+        [@fadeInRight]>
+        <img
+          [src]="principal.image"
+          [alt]="principal.name"
+          class="w-full h-80 object-cover object-top rounded-md mb-4"
+        />
+        <p class="text-gray-800 text-base mb-4">
+          {{ principal.name }} ({{ principal.designation }}), EMRS, Saladahara,
+          Berhampur, Nilgiri
+        </p>
+        <a
+          class="read-mr hvr-icon-forward cursor-pointer text-blue-700 font-semibold hover:underline"
+          (click)="openMessage(principal.name, principal.message)">
+          Read message
+          <fa-icon [icon]="faArrowRight" class="ml-2 text-blue-700"></fa-icon>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Modal -->
+<app-message-modal
+  *ngIf="modalOpen"
+  @fadeInOut
+  [message]="modalMessage"
+  [title]="modalTitle"
+  [author]="modalAuthor"
+  (close)="closeModal()"
+></app-message-modal>

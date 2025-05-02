@@ -1,0 +1,94 @@
+<section class="bg-gray-50 py-12">
+  <div class="container mx-auto px-4">
+    <div class="grid lg:grid-cols-3 gap-6">
+
+      <!-- Notice Board -->
+      <div class="lg:col-span-2 space-y-6">
+        <div class="bg-white shadow rounded-lg p-6">
+          <div class="flex items-center justify-between border-b pb-4 mb-4">
+            <div class="flex items-center space-x-4">
+              <fa-icon [icon]="faBullhorn" class="text-blue-600 text-3xl"></fa-icon>
+              <h2 class="text-xl font-semibold text-gray-800">Notice Board</h2>
+            </div>
+            <a routerLink="/notice" class="text-blue-600 hover:underline flex items-center gap-1">
+              More <fa-icon [icon]="faArrowRight" class="text-sm"></fa-icon>
+            </a>
+          </div>
+          <!-- Inside Notice Board -->
+          <div class="overflow-hidden h-20 relative">
+            <ul
+              [ngClass]="{
+      'absolute top-0 left-0 w-full space-y-4': true,
+      'animate-ticker': notices.length > 1}">
+              <li
+                *ngFor="let notice of notices"
+                class="flex items-center gap-2"
+              >
+                <p class="text-gray-700">{{ notice.message }}</p>
+                <span
+                  class="bg-red-500 text-white text-xs font-semibold px-2 py-0.5 rounded animate-pulse ml-2">NEW</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Lecture Notes -->
+        <div class="bg-white shadow rounded-lg p-6">
+          <div class="flex items-center justify-between border-b pb-4 mb-4">
+            <div class="flex items-center space-x-4">
+              <fa-icon [icon]="faBookOpen" class="text-green-600 text-3xl"></fa-icon>
+              <h2 class="text-xl font-semibold text-gray-800">Lecture Notes</h2>
+            </div>
+            <a routerLink="/lecture-notes" class="text-blue-600 hover:underline flex items-center gap-1">
+              More <fa-icon [icon]="faArrowRight" class="text-sm"></fa-icon>
+            </a>
+          </div>
+          <div class="overflow-hidden h-20 relative">
+            <ul
+              [ngClass]="{
+      'absolute top-0 left-0 w-full space-y-4': true,
+      'animate-ticker': lectNotes.length > 1}">
+              <li
+                *ngFor="let note of lectNotes"
+                class="flex items-center gap-2"
+              >
+                <p class="text-gray-700">{{ note.message }}</p>
+                <span
+                  class="bg-red-500 text-white text-xs font-semibold px-2 py-0.5 rounded animate-pulse ml-2">NEW</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tenders -->
+      <div class="bg-white shadow rounded-lg p-6 h-90">
+        <div class="flex items-center justify-between border-b pb-4 mb-4">
+          <div class="flex items-center space-x-4">
+            <fa-icon [icon]="faFileContract" class="text-yellow-600 text-3xl"></fa-icon>
+            <h2 class="text-xl font-semibold text-gray-800">Tenders</h2>
+          </div>
+          <a routerLink="/tenders" class="text-blue-600 hover:underline flex items-center gap-1">
+            More <fa-icon [icon]="faArrowRight" class="text-sm"></fa-icon>
+          </a>
+        </div>
+        <div class="overflow-hidden h-[285px] relative">
+          <ul
+            [ngClass]="{
+      'absolute top-0 left-0 w-full space-y-4': true,
+      'animate-ticker': tenders.length > 1}">
+            <li
+              *ngFor="let tender of tenders"
+              class="flex items-center gap-2"
+            >
+              <p class="text-gray-700">{{ tender.message }}</p>
+              <span
+                class="bg-red-500 text-white text-xs font-semibold px-2 py-0.5 rounded animate-pulse ml-2">NEW</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>

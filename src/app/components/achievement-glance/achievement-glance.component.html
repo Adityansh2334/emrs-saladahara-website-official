@@ -1,0 +1,47 @@
+<section class="bg-white py-12">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-10 items-stretch">
+
+      <!-- Left: Achievements -->
+      <div class="lg:col-span-2 flex flex-col">
+        <h2 class="text-3xl font-bold mb-6 text-blue-900">Achievements at a Glance</h2>
+        <div class="relative flex-grow overflow-hidden rounded-xl shadow h-full">
+          <div class="swiper-container h-full" id="achievementSwiper">
+            <div class="swiper-wrapper">
+              <ng-container *ngFor="let item of achievements">
+                <div class="swiper-slide flex flex-col h-full">
+                  <div class="aspect-[16/7] w-full overflow-hidden rounded-t-xl">
+                    <img [src]="item.image" alt="Achievement" class="w-full h-full object-cover">
+                  </div>
+                  <div class="bg-blue-50 text-sm p-4 text-center font-medium text-gray-700 rounded-b-xl">
+                    {{ item.caption }}
+                  </div>
+                  <br>
+                </div>
+              </ng-container>
+            </div>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-button-next"></div>
+            <div class="swiper-pagination"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Government Links -->
+      <div class="flex flex-col">
+        <h2 class="text-2xl font-bold mb-6 text-blue-900">Important Links</h2>
+        <div class="space-y-4 flex-grow">
+          <a *ngFor="let link of govLinks"
+             [href]="link.url"
+             target="_blank"
+             class="flex items-center p-3 bg-gray-100 hover:bg-blue-100 transition rounded-lg shadow">
+            <img [src]="link.image" alt="{{ link.title }}"
+                 class="w-12 h-12 mr-4 object-contain">
+            <span class="text-sm font-medium text-gray-800">{{ link.title }}</span>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>

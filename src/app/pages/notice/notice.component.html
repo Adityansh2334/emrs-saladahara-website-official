@@ -1,0 +1,60 @@
+<!-- Breadcrumbs -->
+<app-breadcrumbs-style pageName="Notice"></app-breadcrumbs-style>
+
+<!-- Notices Section -->
+<div class="max-w-5xl mx-auto p-6 bg-white rounded-xl shadow-md">
+  <h2 class="text-2xl font-bold text-blue-900 mb-4">📄 Notices</h2>
+
+  <div class="overflow-x-auto">
+    <table class="min-w-full divide-y divide-gray-200">
+      <thead class="bg-gray-100">
+      <tr>
+        <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Notification Name</th>
+        <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Uploaded Date</th>
+        <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Size</th>
+        <th class="px-4 py-3 text-center text-sm font-medium text-gray-700">Download</th>
+      </tr>
+      </thead>
+      <tbody class="bg-white divide-y divide-gray-200">
+      <tr *ngFor="let notice of paginatedNotices">
+        <td class="px-4 py-3 text-gray-800">{{ notice.name }}</td>
+        <td class="px-4 py-3">{{ notice.uploadedDate | date: 'mediumDate' }}</td>
+        <td class="px-4 py-3">{{ notice.size }}</td>
+        <td class="px-4 py-3 text-center">
+          <button
+            (click)="downloadFile(notice.fileUrl)"
+            class="text-blue-600 hover:text-blue-800"
+            aria-label="Download"
+          >
+            <fa-icon [icon]="faDownload"></fa-icon>
+          </button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pagination -->
+  <div class="flex justify-between items-center mt-4">
+    <button
+      (click)="changePage(-1)"
+      [disabled]="currentPage === 1"
+      class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
+    >
+      Prev
+    </button>
+
+    <span class="text-sm text-gray-600">
+      Page {{ currentPage }} of {{ totalPages }}
+    </span>
+
+    <button
+      (click)="changePage(1)"
+      [disabled]="currentPage === totalPages"
+      class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
+    >
+      Next
+    </button>
+  </div>
+</div>
+<div class="h-8"></div>

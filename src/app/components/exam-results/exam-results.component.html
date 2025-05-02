@@ -1,0 +1,105 @@
+<!-- Filters Section -->
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6 mt-10">
+  <!-- Class Filter -->
+  <ng-select
+    [items]="examClassList"
+    [(ngModel)]="selectedExamClass"
+    (ngModelChange)="onExamFilterChange()"
+    bindLabel="label"
+    bindValue="value"
+    placeholder="🎓 Filter by Class"
+    class="ng-select-custom"
+  ></ng-select>
+
+  <!-- Exam Name Filter -->
+  <ng-select
+    [items]="examNameList"
+    [(ngModel)]="selectedExamName"
+    (ngModelChange)="onExamFilterChange()"
+    bindLabel="label"
+    bindValue="value"
+    placeholder="📝 Filter by Exam Name"
+    class="ng-select-custom"
+  ></ng-select>
+
+  <!-- Search Input (optional) -->
+  <input
+    type="text"
+    [(ngModel)]="examSearchText"
+    (ngModelChange)="onExamFilterChange()"
+    placeholder="🔍 Search by Exam Name..."
+    class="w-full border border-gray-300 rounded px-4 py-2 shadow-sm transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
+  />
+</div>
+
+<!-- Table Section -->
+<div class="overflow-x-auto mt-6">
+  <table class="min-w-full text-sm text-gray-700 bg-white border border-gray-200 shadow-md rounded-lg overflow-hidden">
+    <thead>
+    <tr class="bg-gradient-to-r from-blue-100 via-blue-50 to-blue-100 text-blue-900 uppercase text-xs tracking-wider">
+      <th class="py-3 px-5 text-left">📝 Exam</th>
+      <th class="py-3 px-5 text-left">🏫 Class</th>
+      <th class="py-3 px-5 text-left">📅 Date</th>
+      <th class="py-3 px-5 text-left">📤 Result</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let exam of paginatedExams" class="border-t border-gray-100 hover:bg-blue-50 transition">
+      <td class="py-3 px-5 font-medium">{{ exam.name }}</td>
+      <td class="py-3 px-5">Class {{ exam.class }}</td>
+      <td class="py-3 px-5">{{ exam.date }}</td>
+      <td class="py-3 px-5">
+        <ng-container *ngIf="exam.resultStatus === 'Available'; else notAvailable">
+          <a
+            [href]="exam.resultUrl"
+            target="_blank"
+            class="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white text-xs font-semibold px-3 py-1.5 rounded shadow transition"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                 stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5m0 0l5-5m-5 5V4" />
+            </svg>
+            Download
+          </a>
+        </ng-container>
+        <ng-template #notAvailable>
+          <span class="text-gray-400 italic">{{ exam.resultStatus }}</span>
+        </ng-template>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Pagination Controls -->
+<div class="flex justify-center mt-6 space-x-2" *ngIf="totalPages > 1">
+  <button
+    class="px-3 py-1 text-sm rounded border bg-white text-blue-600 hover:bg-blue-100 disabled:opacity-50 disabled:cursor-not-allowed"
+    [disabled]="currentPage === 1"
+    (click)="goToPage(currentPage - 1)"
+  >
+    ◀ Prev
+  </button>
+
+  <ng-container *ngFor="let page of [].constructor(totalPages); let i = index">
+    <button
+      class="px-3 py-1 text-sm rounded border transition"
+      [ngClass]="{
+        'bg-blue-600 text-white shadow': currentPage === i + 1,
+        'bg-white text-blue-600 hover:bg-blue-100': currentPage !== i + 1
+      }"
+      (click)="goToPage(i + 1)"
+    >
+      {{ i + 1 }}
+    </button>
+  </ng-container>
+
+  <button
+    class="px-3 py-1 text-sm rounded border bg-white text-blue-600 hover:bg-blue-100 disabled:opacity-50 disabled:cursor-not-allowed"
+    [disabled]="currentPage === totalPages"
+    (click)="goToPage(currentPage + 1)"
+  >
+    Next ▶
+  </button>
+</div>

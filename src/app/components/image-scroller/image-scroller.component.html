@@ -1,0 +1,21 @@
+<div class="image-scroller overflow-hidden py-4">
+  <div class="flex space-x-4 animate-scroll">
+    <img
+      *ngFor="let img of scrollImages; let i = index"
+      (click)="openImageViewer(i)"
+      [src]="img"
+      [alt]="'School Photo ' + (i + 1)"
+      class="h-60 w-auto rounded-lg shadow-lg cursor-pointer"
+    />
+  </div>
+</div>
+
+<!-- Image Viewer Component -->
+<app-image-viewer
+  *ngIf="imageViewerOpen"
+  [images]="scrollImages"
+  [currentIndex]="selectedImageIndex"
+  [isOpen]="imageViewerOpen"
+  (close)="closeImageViewer()"
+></app-image-viewer>
+

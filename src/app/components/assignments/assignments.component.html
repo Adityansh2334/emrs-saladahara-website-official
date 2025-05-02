@@ -1,0 +1,109 @@
+<div class="mb-10">
+  <h2 class="text-2xl font-semibold mb-4">📚 Class & Subject-wise Assignments</h2>
+  <p class="text-gray-700 mb-4">Download and submit assignments before the due date.</p>
+
+  <!-- Filters with animation and styled ng-select -->
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+    <!-- Class Filter -->
+    <ng-select
+      [items]="classList"
+      [(ngModel)]="selectedClass"
+      (ngModelChange)="onFilterChange()"
+      bindLabel="label"
+      bindValue="value"
+      placeholder="🎓 Filter by Class"
+      class="ng-select-custom"
+    ></ng-select>
+
+    <!-- Subject Filter -->
+    <ng-select
+      [items]="subjectList"
+      [(ngModel)]="selectedSubject"
+      (ngModelChange)="onFilterChange()"
+      bindLabel="label"
+      bindValue="value"
+      placeholder="📘 Filter by Subject"
+      class="ng-select-custom"
+    ></ng-select>
+
+    <!-- Search Input -->
+    <input
+      type="text"
+      [(ngModel)]="searchTitle"
+      (ngModelChange)="onFilterChange()"
+      placeholder="🔍 Search by title..."
+      class="w-full border border-gray-300 rounded px-4 py-2 shadow-sm transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
+    />
+  </div>
+
+  <!-- Table -->
+  <div class="overflow-x-auto">
+    <table class="min-w-full text-sm text-gray-700 bg-white border border-gray-200 shadow-md rounded-lg overflow-hidden">
+      <thead>
+      <tr class="bg-gradient-to-r from-blue-100 via-blue-50 to-blue-100 text-blue-900 uppercase text-xs tracking-wider">
+        <th class="py-3 px-5 text-left">🎓 Class</th>
+        <th class="py-3 px-5 text-left">📘 Subject</th>
+        <th class="py-3 px-5 text-left">📝 Title</th>
+        <th class="py-3 px-5 text-left">👩‍🏫 Teacher</th>
+        <th class="py-3 px-5 text-left">📅 Due Date</th>
+        <th class="py-3 px-5 text-left">📥 File</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let a of paginatedAssignments" class="border-t border-gray-100 hover:bg-blue-50 transition">
+        <td class="py-3 px-5">{{ a.class }}</td>
+        <td class="py-3 px-5">{{ a.subject }}</td>
+        <td class="py-3 px-5">{{ a.title }}</td>
+        <td class="py-3 px-5">{{ a.teacher }}</td>
+        <td class="py-3 px-5">{{ a.dueDate }}</td>
+        <td class="py-3 px-5">
+          <a
+            [href]="a.fileUrl"
+            target="_blank"
+            class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded transition"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                 stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5m0 0l5-5m-5 5V4" />
+            </svg>
+            Download
+          </a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pagination Controls -->
+  <div class="flex justify-center mt-6 space-x-2" *ngIf="assignmentTotalPages > 1">
+    <button
+      class="px-3 py-1 text-sm rounded border bg-white text-blue-600 hover:bg-blue-100 disabled:opacity-50 disabled:cursor-not-allowed"
+      [disabled]="assignmentPage === 1"
+      (click)="goToAssignmentPage(assignmentPage - 1)"
+    >
+      ◀ Prev
+    </button>
+
+    <ng-container *ngFor="let page of [].constructor(assignmentTotalPages); let i = index">
+      <button
+        class="px-3 py-1 text-sm rounded border transition"
+        [ngClass]="{
+          'bg-blue-600 text-white shadow': assignmentPage === i + 1,
+          'bg-white text-blue-600 hover:bg-blue-100': assignmentPage !== i + 1
+        }"
+        (click)="goToAssignmentPage(i + 1)"
+      >
+        {{ i + 1 }}
+      </button>
+    </ng-container>
+
+    <button
+      class="px-3 py-1 text-sm rounded border bg-white text-blue-600 hover:bg-blue-100 disabled:opacity-50 disabled:cursor-not-allowed"
+      [disabled]="assignmentPage === assignmentTotalPages"
+      (click)="goToAssignmentPage(assignmentPage + 1)"
+    >
+      Next ▶
+    </button>
+  </div>
+</div>

@@ -1,0 +1,69 @@
+<app-breadcrumbs-style pageName="Admissions"></app-breadcrumbs-style>
+
+<section class="bg-gradient-to-b from-blue-50 to-white py-16 px-4">
+  <div class="max-w-6xl mx-auto">
+
+    <!-- Hero Section -->
+    <div class="text-center mb-12" [@fadeInUp]>
+      <h1 class="text-4xl font-bold text-blue-800 mb-3">Admissions {{ currentYear }}-{{nextYear}}</h1>
+      <p class="text-lg text-gray-600">Empowering Tribal Youth Through Quality Education</p>
+    </div>
+
+    <!-- Admission Overview -->
+    <div class="bg-white rounded-2xl shadow-lg p-8 mb-16" [@fadeInUp]>
+      <h2 class="text-2xl font-semibold text-blue-700 mb-4">Admission Overview</h2>
+      <p class="text-gray-700 leading-relaxed">
+        EMRS Saladahara invites applications for admission to Class VI for the academic year 2025-26. Admissions are granted based on the Eklavya Model Residential School Selection Test (EMRSST). The school provides free residential education to meritorious tribal students.
+      </p>
+    </div>
+
+    <!-- Eligibility Criteria -->
+    <div class="bg-blue-100 p-6 rounded-xl shadow mb-8" [@fadeInUp]>
+      <h3 class="text-xl font-bold text-blue-800 mb-3">Eligibility Criteria</h3>
+      <ul class="list-disc list-inside text-gray-700 space-y-2">
+        <li *ngFor="let criterion of admissionDetails.eligibility">{{ criterion }}</li>
+      </ul>
+    </div>
+
+    <!-- Documents Required -->
+    <div class="bg-blue-100 p-6 rounded-xl shadow mb-8" [@fadeInUp]>
+      <h3 class="text-xl font-bold text-blue-800 mb-3">Documents Required</h3>
+      <ul class="list-disc list-inside text-gray-700 space-y-2">
+        <li *ngFor="let doc of admissionDetails.documentsRequired">{{ doc }}</li>
+      </ul>
+    </div>
+
+    <!-- Important Dates -->
+    <div class="bg-blue-100 p-6 rounded-xl shadow mb-8" [@fadeInUp]>
+      <h3 class="text-xl font-bold text-blue-800 mb-3">Important Dates</h3>
+      <ul class="text-gray-700 space-y-2">
+        <li *ngFor="let date of admissionDetails.importantDates">
+          <strong>{{ date.event }}:</strong> {{ date.date }}
+        </li>
+      </ul>
+    </div>
+
+    <!-- Application Process -->
+    <div class="bg-white rounded-2xl shadow-lg p-8 mb-16" [@fadeInUp]>
+      <h2 class="text-2xl font-semibold text-blue-700 mb-4">Application Process</h2>
+      <p class="text-gray-700 leading-relaxed mb-4">
+        Interested candidates can obtain the application form from the school office or download it from our official website. The completed form, along with the required documents, should be submitted to the school office by the specified deadline.
+      </p>
+      <a [href]="applicationFormUrl" target="_blank" rel="noopener" class="inline-block bg-blue-600 text-white px-6 py-2 rounded-full font-medium hover:bg-blue-700 transition-all ease-in-out">
+        Download Application Form
+      </a>
+
+    </div>
+
+    <!-- Contact Information -->
+    <div class="text-center max-w-3xl mx-auto" [@fadeInUp]>
+      <p class="text-gray-700">
+        For any queries related to admissions, please contact our admission office at:
+      </p>
+      <p class="mt-2 font-semibold text-blue-800">
+        Phone: {{ contact.phone }} | Email: {{ contact.email }}
+      </p>
+    </div>
+
+  </div>
+</section>

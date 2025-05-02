@@ -1,0 +1,76 @@
+<app-breadcrumbs-style pageName="Contact"></app-breadcrumbs-style>
+<!-- contact.component.html -->
+<div class="py-12 bg-gray-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h1 class="text-4xl font-extrabold text-center text-blue-700 mb-8">Contact Us</h1>
+
+    <!-- Contact Info Section -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+      <!-- Address Block with Icons -->
+      <div class="bg-white p-6 rounded-lg shadow-lg">
+        <h2 class="text-2xl font-semibold text-blue-700 mb-4">Our Address</h2>
+        <div class="text-gray-700 space-y-2 leading-relaxed">
+          <p class="flex items-center">
+            <fa-icon [icon]="faMapMarkerAlt" class="text-blue-600 mr-2"></fa-icon>
+            <span class="font-medium text-blue-600">At:</span>&nbsp;{{ address.at }}
+          </p>
+          <p class="flex items-center">
+            <fa-icon [icon]="faEnvelopeOpenText" class="text-blue-600 mr-2"></fa-icon>
+            <span class="font-medium text-blue-600">Post:</span>&nbsp;{{ address.post }}
+          </p>
+          <p class="flex items-center">
+            <fa-icon [icon]="faCity" class="text-blue-600 mr-2"></fa-icon>
+            <span class="font-medium text-blue-600">Dist:</span>&nbsp;{{ address.dist }}
+          </p>
+          <p class="flex items-center">
+            <fa-icon [icon]="faFlag" class="text-blue-600 mr-2"></fa-icon>
+            <span class="font-medium text-blue-600">State:</span>&nbsp;{{ address.state }}
+          </p>
+          <p class="flex items-center">
+            <fa-icon [icon]="faLocationCrosshairs" class="text-blue-600 mr-2"></fa-icon>
+            <span class="font-medium text-blue-600">PIN:</span>&nbsp;{{ address.pin }}
+          </p>
+        </div>
+      </div>
+
+      <div class="bg-white p-6 rounded-lg shadow-lg">
+        <h2 class="text-2xl font-semibold text-blue-700 mb-4">Get in Touch</h2>
+
+        <!-- Phone Numbers -->
+        <div class="mb-4">
+          <h3 class="text-xl text-blue-600 mb-2">Phone Numbers</h3>
+          <ul class="list-none space-y-1">
+            <li *ngFor="let number of phoneNumbers" class="text-gray-600 flex items-center">
+              <fa-icon [icon]="faPhone" class="text-blue-600 mr-2"></fa-icon>
+              {{ number }}
+            </li>
+          </ul>
+        </div>
+
+        <!-- Emails -->
+        <div>
+          <h3 class="text-xl text-blue-600 mb-2">Emails</h3>
+          <ul class="list-none space-y-1">
+            <li *ngFor="let email of emails" class="text-gray-600 flex items-center">
+              <fa-icon [icon]="faEnvelope" class="text-blue-600 mr-2"></fa-icon>
+              {{ email }}
+            </li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Google Map Section -->
+    <div class="bg-white p-6 rounded-lg shadow-lg">
+      <h2 class="text-2xl font-semibold text-blue-700 mb-4">Find Us on the Map</h2>
+      <iframe
+        class="w-full h-64 rounded-lg"
+        [src]="mapEmbedUrl | safeUrl"
+        style="border:0;"
+        allowfullscreen=""
+        loading="lazy"
+      ></iframe>
+    </div>
+  </div>
+</div>

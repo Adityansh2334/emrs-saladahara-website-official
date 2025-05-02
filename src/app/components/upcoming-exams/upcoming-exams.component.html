@@ -1,0 +1,75 @@
+<div class="mb-10">
+  <h2 class="text-2xl font-semibold mb-4">🗓️ Upcoming Exams</h2>
+  <p class="text-gray-700 mb-2">Stay prepared for the upcoming academic challenges.</p>
+
+  <!-- Table for Upcoming Exams -->
+  <div class="overflow-x-auto bg-white rounded-lg shadow-md">
+    <table class="min-w-full text-sm text-gray-800">
+      <thead
+        class="bg-gradient-to-r from-indigo-100 via-white to-indigo-100 text-indigo-700 uppercase text-xs tracking-wider">
+      <tr>
+        <th class="py-3 px-5 text-left">📘 Exam</th>
+
+        <th class="py-3 px-5 text-left cursor-pointer select-none hover:text-indigo-900 transition"
+            (click)="sortBy('class')" title="Click to sort by Class">
+          🏫 Class
+          <span class="ml-1">
+              <span *ngIf="sortColumn === 'class'">
+                <span *ngIf="sortDirection === 'asc'">▲</span>
+                <span *ngIf="sortDirection === 'desc'">▼</span>
+              </span>
+              <span *ngIf="sortColumn !== 'class'" class="text-gray-400">⇅</span>
+            </span>
+        </th>
+
+        <th class="py-3 px-5 text-left cursor-pointer select-none hover:text-indigo-900 transition"
+            (click)="sortBy('date')" title="Click to sort by Date">
+          📅 Date
+          <span class="ml-1">
+              <span *ngIf="sortColumn === 'date'">
+                <span *ngIf="sortDirection === 'asc'">▲</span>
+                <span *ngIf="sortDirection === 'desc'">▼</span>
+              </span>
+              <span *ngIf="sortColumn !== 'date'" class="text-gray-400">⇅</span>
+            </span>
+        </th>
+
+        <th class="py-3 px-5 text-left">⏳ Time</th>
+      </tr>
+      </thead>
+
+      <tbody>
+      <tr *ngFor="let exam of paginatedUpcomingExams" class="border-t border-gray-100 hover:bg-indigo-50 transition">
+        <td class="py-3 px-5 font-medium">{{ exam.name }}</td>
+        <td class="py-3 px-5">Class {{ exam.class }}</td>
+        <td class="py-3 px-5">{{ exam.date }}</td>
+        <td class="py-3 px-5">{{ exam.time || 'TBD' }}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pagination Controls -->
+  <div class="flex justify-center mt-4 space-x-2" *ngIf="upcomingTotalPages > 1">
+    <button
+      class="px-3 py-1 text-sm rounded border bg-white text-indigo-600 hover:bg-indigo-100 disabled:opacity-50 disabled:cursor-not-allowed"
+      [disabled]="upcomingPage === 1" (click)="goToUpcomingPage(upcomingPage - 1)">
+      ◀ Prev
+    </button>
+
+    <ng-container *ngFor="let page of [].constructor(upcomingTotalPages); let i = index">
+      <button class="px-3 py-1 text-sm rounded border transition" [ngClass]="{
+          'bg-indigo-600 text-white shadow': upcomingPage === i + 1,
+          'bg-white text-indigo-600 hover:bg-indigo-100': upcomingPage !== i + 1
+        }" (click)="goToUpcomingPage(i + 1)">
+        {{ i + 1 }}
+      </button>
+    </ng-container>
+
+    <button
+      class="px-3 py-1 text-sm rounded border bg-white text-indigo-600 hover:bg-indigo-100 disabled:opacity-50 disabled:cursor-not-allowed"
+      [disabled]="upcomingPage === upcomingTotalPages" (click)="goToUpcomingPage(upcomingPage + 1)">
+      Next ▶
+    </button>
+  </div>
+</div>

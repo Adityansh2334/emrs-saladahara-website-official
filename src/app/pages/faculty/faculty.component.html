@@ -1,0 +1,71 @@
+<app-breadcrumbs-style pageName="Faculty"></app-breadcrumbs-style>
+<div class="container mx-auto px-4 py-8">
+  <h2 class="text-3xl font-bold text-center text-blue-800 mb-6">Meet Our Faculty & Staff</h2>
+
+  <!-- Filters -->
+  <div class="flex justify-center flex-wrap gap-3 mb-8">
+    <button
+      (click)="setFilter('all')"
+      [ngClass]="filter === 'all' ? 'bg-blue-700 text-white' : 'bg-white text-blue-700 border border-blue-500'"
+      class="px-5 py-2 rounded-full font-semibold transition hover:bg-blue-600 hover:text-white shadow-sm"
+    >
+      All Staff
+    </button>
+    <button
+      (click)="setFilter('teaching')"
+      [ngClass]="filter === 'teaching' ? 'bg-blue-700 text-white' : 'bg-white text-blue-700 border border-blue-500'"
+      class="px-5 py-2 rounded-full font-semibold transition hover:bg-blue-600 hover:text-white shadow-sm"
+    >
+      Teaching
+    </button>
+    <button
+      (click)="setFilter('non-teaching')"
+      [ngClass]="filter === 'non-teaching' ? 'bg-blue-700 text-white' : 'bg-white text-blue-700 border border-blue-500'"
+      class="px-5 py-2 rounded-full font-semibold transition hover:bg-blue-600 hover:text-white shadow-sm"
+    >
+      Non-Teaching
+    </button>
+  </div>
+
+
+  <!-- Cards Grid -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div *ngFor="let member of filteredStaff"
+         class="bg-white shadow-lg rounded-xl p-4 text-center hover:shadow-2xl transition duration-300">
+      <img [lazyLoad]="member.image" [defaultImage]="'assets/faculty/placeholder.jpg'" alt="{{ member.name }}"
+           class="w-32 h-32 mx-auto object-cover rounded-full border-4 border-blue-200" />
+      <h3 class="text-xl font-semibold mt-4">{{ member.name }}</h3>
+      <p class="text-gray-600">{{ member.designation }}</p>
+      <!-- Inside staff card -->
+      <button
+        (click)="openModal(member)"
+        class="mt-4 inline-block bg-blue-600 text-white px-4 py-2 rounded-full font-medium hover:bg-blue-700 transition duration-300 shadow-md"
+      >
+        View Bio
+      </button>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div
+    *ngIf="selectedStaff"
+    @fadeInOut
+    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+  >
+    <div class="bg-white rounded-lg shadow-lg w-full max-w-md relative px-6 py-5">
+      <h3 class="text-xl font-semibold text-gray-800 mb-2">{{ selectedStaff.name }}</h3>
+      <p class="text-blue-600 font-medium mb-4">{{ selectedStaff.designation }}</p>
+      <p class="text-gray-700 mb-6">{{ selectedStaff.bio }}</p>
+
+      <div class="flex justify-end">
+        <button
+          (click)="closeModal()"
+          class="px-5 py-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition font-semibold shadow"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>

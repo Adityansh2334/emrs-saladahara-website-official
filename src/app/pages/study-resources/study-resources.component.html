@@ -1,0 +1,104 @@
+<app-breadcrumbs-style pageName="Study Resources & Materials"></app-breadcrumbs-style>
+
+<section class="bg-gray-50 py-12 px-4">
+  <div class="max-w-7xl mx-auto">
+
+    <!-- Hero Section -->
+    <div class="text-center mb-12">
+      <h1 class="text-4xl font-bold text-blue-800 mb-2">📚 Study Resources & Materials</h1>
+      <p class="text-lg text-gray-600">Your Gateway to Academic Success</p>
+    </div>
+
+    <!-- Tab Navigation -->
+    <div class="flex justify-center mb-10">
+      <button
+        (click)="setActiveTab('textbooks')"
+        [class.bg-blue-700]="activeTab === 'textbooks'"
+        [class.text-white]="activeTab === 'textbooks'"
+        [class.bg-blue-100]="activeTab !== 'textbooks'"
+        [class.text-blue-800]="activeTab !== 'textbooks'"
+        class="px-6 py-2 rounded-full font-medium text-gray-800 hover:bg-blue-600 hover:text-white transition-all ease-in-out mx-2 shadow-md">
+        📘 Textbooks
+      </button>
+      <button
+        (click)="setActiveTab('practicePapers')"
+        [class.bg-blue-700]="activeTab === 'practicePapers'"
+        [class.text-white]="activeTab === 'practicePapers'"
+        [class.bg-blue-100]="activeTab !== 'practicePapers'"
+        [class.text-blue-800]="activeTab !== 'practicePapers'"
+        class="px-6 py-2 rounded-full font-medium text-gray-800 hover:bg-blue-600 hover:text-white transition-all ease-in-out mx-2 shadow-md">
+        📝 Practice Papers
+      </button>
+      <button
+        (click)="setActiveTab('learningResources')"
+        [class.bg-blue-700]="activeTab === 'learningResources'"
+        [class.text-white]="activeTab === 'learningResources'"
+        [class.bg-blue-100]="activeTab !== 'learningResources'"
+        [class.text-blue-800]="activeTab !== 'learningResources'"
+        class="px-6 py-2 rounded-full font-medium text-gray-800 hover:bg-blue-600 hover:text-white transition-all ease-in-out mx-2 shadow-md">
+        🌐 Free Learning Resources
+      </button>
+    </div>
+
+    <!-- Tab Content -->
+    <div class="tab-content">
+
+      <!-- Textbooks Tab -->
+      <div *ngIf="activeTab === 'textbooks'" class="space-y-8">
+        <h2 class="text-2xl font-semibold text-blue-700 mb-4">Download Textbooks</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div *ngFor="let textbook of textbooks" class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg">
+            <h3 class="text-lg font-semibold text-blue-800">{{ textbook.title }}</h3>
+            <p class="text-gray-600 mb-4">{{ textbook.description }}</p>
+            <a [href]="textbook.downloadLink" class="bg-blue-600 text-white px-6 py-2 rounded-full font-medium hover:bg-blue-700 transition-all ease-in-out flex items-center justify-center">
+              <span class="mr-2">Download</span><i class="fas fa-download"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Practice Papers Tab -->
+      <div *ngIf="activeTab === 'practicePapers'" class="space-y-8">
+        <h2 class="text-2xl font-semibold text-blue-700 mb-4">Practice Papers</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div *ngFor="let paper of practicePapers" class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg">
+            <h3 class="text-lg font-semibold text-blue-800">{{ paper.title }}</h3>
+            <p class="text-gray-600 mb-4">{{ paper.description }}</p>
+            <a [href]="paper.downloadLink" class="bg-blue-600 text-white px-6 py-2 rounded-full font-medium hover:bg-blue-700 transition-all ease-in-out flex items-center justify-center">
+              <span class="mr-2">Download</span><i class="fas fa-download"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Free Learning Resources Tab -->
+      <div *ngIf="activeTab === 'learningResources'" class="space-y-8">
+        <h2 class="text-2xl font-semibold text-blue-700 mb-4">Free Learning Resources</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg">
+            <h3 class="text-lg font-semibold text-blue-800">Khan Academy</h3>
+            <p class="text-gray-600 mb-4">Free online courses covering a wide range of subjects. A great resource for all learners.</p>
+            <a href="https://www.khanacademy.org" target="_blank" class="bg-green-600 text-white px-6 py-2 rounded-full font-medium hover:bg-green-700 transition-all ease-in-out flex items-center justify-center">
+              <span class="mr-2">Visit Website</span><i class="fas fa-external-link-alt"></i>
+            </a>
+          </div>
+          <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg">
+            <h3 class="text-lg font-semibold text-blue-800">National Repository of Open Educational Resources (NROER)</h3>
+            <p class="text-gray-600 mb-4">Free learning resources for school students, teachers, and educators across India.</p>
+            <a href="https://nroer.gov.in" target="_blank" class="bg-green-600 text-white px-6 py-2 rounded-full font-medium hover:bg-green-700 transition-all ease-in-out flex items-center justify-center">
+              <span class="mr-2">Visit Website</span><i class="fas fa-external-link-alt"></i>
+            </a>
+          </div>
+          <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg">
+            <h3 class="text-lg font-semibold text-blue-800">NCERT Textbooks</h3>
+            <p class="text-gray-600 mb-4">Download free NCERT textbooks and materials for all subjects and classes.</p>
+            <a href="https://ncert.nic.in/textbook.php" target="_blank" class="bg-green-600 text-white px-6 py-2 rounded-full font-medium hover:bg-green-700 transition-all ease-in-out flex items-center justify-center">
+              <span class="mr-2">Visit Website</span><i class="fas fa-external-link-alt"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>

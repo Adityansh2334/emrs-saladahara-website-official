@@ -1,0 +1,70 @@
+<app-breadcrumbs-style pageName="Facilities"></app-breadcrumbs-style>
+
+<section class="bg-gray-50 py-10">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h2 class="text-4xl font-bold text-blue-800 text-center mb-12">🏠 Campus Facilities</h2>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div
+        *ngFor="let facility of facilities"
+        class="bg-white rounded-xl shadow-md hover:shadow-xl transition cursor-pointer"
+        (click)="openModal(facility)"
+      >
+        <img [src]="facility.image" [alt]="facility.title" class="w-full h-48 object-cover rounded-t-xl" />
+        <div class="p-5">
+          <h3 class="text-xl font-semibold text-blue-700">{{ facility.icon }} {{ facility.title }}</h3>
+          <p class="text-gray-600 mt-2 line-clamp-3">{{ facility.description }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div
+    *ngIf="selectedFacility"
+    @fadeInOut
+    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+  >
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-5xl p-8 relative">
+      <owl-carousel-o
+        [options]="carouselOptions"
+        *ngIf="selectedFacility && selectedFacility.images_modal?.length"
+        class="rounded-xl overflow-hidden"
+      >
+        <ng-container *ngFor="let img of selectedFacility.images_modal; let i = index">
+          <ng-template carouselSlide>
+            <img
+              [src]="img"
+              (click)="openImageViewer(i)"
+              class="w-full h-72 object-cover cursor-pointer hover:scale-105 transition"
+              alt="Facility Image"
+            />
+          </ng-template>
+        </ng-container>
+      </owl-carousel-o>
+
+      <h3 class="text-3xl font-semibold text-blue-800 mb-4">
+        {{ selectedFacility.icon }} {{ selectedFacility.title }}
+      </h3>
+
+      <p class="text-gray-700 text-lg mb-6">{{ selectedFacility.deep_description }}</p>
+
+      <div class="text-right">
+        <button
+          (click)="closeModal()"
+          class="bg-blue-600 text-white px-6 py-2 rounded-full shadow hover:bg-blue-700 transition"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- Image Viewer Component -->
+<app-image-viewer
+  *ngIf="imageViewerOpen"
+  [images]="scrollImages"
+  [currentIndex]="selectedImageIndex"
+  [isOpen]="imageViewerOpen"
+  (close)="closeImageViewer()"
+></app-image-viewer>

@@ -1,0 +1,56 @@
+<app-breadcrumbs-style pageName="Gallery"></app-breadcrumbs-style>
+<section class="bg-gray-50 py-12 text-gray-800">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+    <h2 class="text-4xl font-bold text-blue-900 text-center mb-10" >
+      📸 Our Gallery
+    </h2>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6" >
+      <div
+        *ngFor="let section of gallerySections"
+        class="bg-white rounded-xl overflow-hidden shadow hover:shadow-lg transition"
+        (click)="openModal(section)"
+      >
+        <img [src]="section.coverImage" alt="{{ section.title }}" class="w-full h-52 object-cover cursor-pointer" />
+        <div class="p-4">
+          <h3 class="text-lg font-semibold text-blue-800">{{ section.title }}</h3>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Overlay -->
+    <div
+      *ngIf="activeSection"
+      @fadeInOut
+      class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50"
+    >
+      <div class="bg-white rounded-2xl shadow-lg max-w-5xl w-full p-6 relative">
+        <button
+          class="absolute top-2 right-2 text-red-600 hover:text-red-800 text-xl"
+          (click)="closeModal()"
+        >
+          ✖
+        </button>
+        <h3 class="text-2xl font-bold text-blue-900 mb-4">{{ activeSection?.title }}</h3>
+
+        <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
+          <img
+            *ngFor="let img of activeSection.images; let i = index"
+            [src]="img"
+            (click)="openImageViewer(i)"
+            class="rounded-lg object-cover w-full h-48 shadow hover:scale-105 transition cursor-pointer"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<app-image-viewer
+  *ngIf="activeSection && isViewerOpen"
+  [images]="activeSection.images"
+  [currentIndex]="selectedImageIndex"
+  [isOpen]="isViewerOpen"
+></app-image-viewer>
+

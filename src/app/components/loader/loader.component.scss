@@ -1,0 +1,48 @@
+.chalk-loader {
+  position: fixed; /* Keep the loader fixed at the center of the screen */
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(28, 28, 28, 0.8); /* Black background with slight transparency */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999; /* Ensure the loader is on top of everything */
+}
+
+
+svg {
+  width: 80%;
+  height: auto;
+}
+
+.chalk-text {
+  font-family: 'Caveat', cursive; /* Use a chalk-like font (make sure to import in your index.html) */
+  font-size: 60px;
+  fill: none;
+  stroke: white;
+  stroke-width: 1.5px;
+  stroke-dasharray: 1200;
+  stroke-dashoffset: 1200;
+  animation: chalkDraw 3s ease forwards, loopChalkDraw 6s infinite;
+}
+
+@keyframes chalkDraw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Loop animation */
+@keyframes loopChalkDraw {
+  0% {
+    stroke-dashoffset: 1200;
+  }
+  50% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: 1200;
+  }
+}

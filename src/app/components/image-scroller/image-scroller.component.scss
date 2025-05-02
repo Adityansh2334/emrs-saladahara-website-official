@@ -1,0 +1,15 @@
+.image-scroller {
+  .animate-scroll {
+    display: flex;
+    animation: scrollImages 20s linear infinite;
+  }
+
+  @keyframes scrollImages {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-100%);
+    }
+  }
+}

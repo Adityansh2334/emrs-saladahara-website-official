@@ -1,0 +1,17 @@
+:host {
+  .modal-enter {
+    @apply opacity-0 scale-95;
+  }
+
+  .modal-enter-active {
+    @apply transition-all duration-300 ease-out opacity-100 scale-100;
+  }
+
+  .modal-leave {
+    @apply opacity-100 scale-100;
+  }
+
+  .modal-leave-active {
+    @apply transition-all duration-200 ease-in opacity-0 scale-95;
+  }
+}

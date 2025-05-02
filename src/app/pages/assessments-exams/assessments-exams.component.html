@@ -1,0 +1,55 @@
+<app-breadcrumbs-style pageName="Assessments & Exams"></app-breadcrumbs-style>
+
+<div class="container mx-auto px-4 py-10" [@fadeInUp]>
+
+  <!-- Card Wrapper -->
+  <div class="bg-white rounded-2xl shadow-xl border border-gray-100 p-6">
+
+    <!-- Tab Navigation -->
+    <div class="flex space-x-6 mb-6 border-b border-gray-200 pb-4">
+      <button
+        (click)="setActiveTab('upcomingExams')"
+        [class.text-blue-600]="activeTab === 'upcomingExams'"
+        [class.font-bold]="activeTab === 'upcomingExams'"
+        class="relative py-2 px-4 rounded transition hover:text-blue-800 focus:outline-none"
+      >
+        🗓️ Upcoming Exams
+        <span *ngIf="activeTab === 'upcomingExams'" class="absolute left-0 -bottom-1 w-full h-1 bg-blue-600 rounded-t-md"></span>
+      </button>
+
+      <button
+        (click)="setActiveTab('examResults')"
+        [class.text-blue-600]="activeTab === 'examResults'"
+        [class.font-bold]="activeTab === 'examResults'"
+        class="relative py-2 px-4 rounded transition hover:text-blue-800 focus:outline-none"
+      >
+        📄 Exam Results
+        <span *ngIf="activeTab === 'examResults'" class="absolute left-0 -bottom-1 w-full h-1 bg-blue-600 rounded-t-md"></span>
+      </button>
+
+      <button
+        (click)="setActiveTab('assignments')"
+        [class.text-blue-600]="activeTab === 'assignments'"
+        [class.font-bold]="activeTab === 'assignments'"
+        class="relative py-2 px-4 rounded transition hover:text-blue-800 focus:outline-none"
+      >
+        📝 Assignments
+        <span *ngIf="activeTab === 'assignments'" class="absolute left-0 -bottom-1 w-full h-1 bg-blue-600 rounded-t-md"></span>
+      </button>
+    </div>
+
+    <!-- Tab Content -->
+    <div *ngIf="activeTab === 'upcomingExams'">
+      <app-upcoming-exams></app-upcoming-exams>
+    </div>
+
+    <div *ngIf="activeTab === 'examResults'">
+      <app-exam-results></app-exam-results>
+    </div>
+
+    <div *ngIf="activeTab === 'assignments'">
+      <app-assignments></app-assignments>
+    </div>
+
+  </div>
+</div>

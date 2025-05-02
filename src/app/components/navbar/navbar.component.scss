@@ -1,0 +1,8 @@
+header {
+  a {
+    transition: all 0.3s;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

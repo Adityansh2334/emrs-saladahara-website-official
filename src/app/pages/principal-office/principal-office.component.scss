@@ -1,0 +1,15 @@
+:host {
+  display: block;
+
+  h1, h2, h3 {
+    @apply font-bold;
+  }
+
+  p {
+    @apply leading-relaxed;
+  }
+
+  img {
+    @apply object-cover;
+  }
+}

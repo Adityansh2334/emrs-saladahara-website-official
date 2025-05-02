@@ -1,0 +1,22 @@
+:host {
+  .swiper-container {
+    width: 100%;
+    height: 100%;
+  }
+
+  .swiper-slide {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #fff;
+  }
+
+  .swiper-button-next,
+  .swiper-button-prev {
+    color: #1d4ed8; // Tailwind blue-700
+  }
+
+  .swiper-pagination-bullet-active {
+    background-color: #1d4ed8;
+  }
+}

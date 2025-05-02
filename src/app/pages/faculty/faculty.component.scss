@@ -1,0 +1,8 @@
+.container {
+  @apply max-w-7xl;
+}
+button {
+  &:focus {
+    @apply outline-none ring-2 ring-blue-300;
+  }
+}
