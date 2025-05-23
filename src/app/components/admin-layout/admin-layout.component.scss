@@ -1,0 +1,29 @@
+/* admin-layout.component.css */
+.sidebar {
+  width: 240px;
+  background-color: #2d3748;
+  color: white;
+}
+
+.sidebar ul {
+  padding: 0;
+  list-style: none;
+}
+
+.sidebar li {
+  padding: 12px 16px;
+}
+
+.sidebar li a {
+  color: white;
+  text-decoration: none;
+}
+
+.sidebar li a:hover {
+  background-color: #4a5568;
+}
+
+.main-content {
+  flex-grow: 1;
+  padding: 16px;
+}

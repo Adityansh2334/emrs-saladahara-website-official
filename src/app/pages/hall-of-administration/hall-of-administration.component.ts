@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import { trigger, transition, style, animate } from '@angular/animations';
 import {BreadcrumbsStyleComponent} from '../../components/breadcrumbs-style/breadcrumbs-style.component';
 import {NgForOf} from '@angular/common';
+import {AdminDocument, HallAdminService} from '../../admin/services/hall-admin.service';
 
 @Component({
   selector: 'app-hall-of-administration',
@@ -21,23 +22,24 @@ import {NgForOf} from '@angular/common';
     ])
   ]
 })
-export class HallOfAdministrationComponent {
+export class HallOfAdministrationComponent  implements OnInit{
   currentYear = new Date().getFullYear();
 
-  administrationDocuments = [
-    { title: 'Society Registration Certificate', url: '/assets/documents/society-registration.pdf' },
-    { title: 'Recognition Certificate', url: '/assets/documents/recognition-certificate.pdf' },
-    { title: 'No Objection Certificate', url: '/assets/documents/noc.pdf' },
-    { title: 'Building Safety Certificate', url: '/assets/documents/building-safety.pdf' },
-    { title: 'Fire Safety Certificate', url: '/assets/documents/fire-safety.pdf' },
-    { title: 'Self Certification', url: '/assets/documents/self-certification.pdf' }
-  ];
+  administrationDocuments:AdminDocument[] = [];
 
   administrativeStaff = [
-    { name: 'Dr. Ramesh Kumar Singh', designation: 'Principal', photo: '/assets/images/staff/principal.jpg' },
-    { name: 'Ms. Anjali Sharma', designation: 'Vice Principal', photo: '/assets/images/staff/vice-principal.jpg' },
-    { name: 'Mr. Suresh Das', designation: 'Administrative Officer', photo: '/assets/images/staff/admin-officer.jpg' },
-    { name: 'Ms. Priya Patel', designation: 'Accounts Officer', photo: '/assets/images/staff/accounts-officer.jpg' }
-    // Add more staff members as needed
+    { name: '', designation: '', photo: '' }
   ];
+
+  constructor(private hallAdminService: HallAdminService) {
+  }
+
+  ngOnInit(): void {
+    this.hallAdminService.getHOA().subscribe(hoa => {
+      this.administrativeStaff = hoa;
+    })
+    this.hallAdminService.getHoaDocuments().subscribe(docs => {
+      this.administrationDocuments = docs;
+    })
+  }
 }

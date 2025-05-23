@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import { trigger, transition, style, animate } from '@angular/animations';
 import {BreadcrumbsStyleComponent} from '../../components/breadcrumbs-style/breadcrumbs-style.component';
+import {PersonData, PrincipalSecretaryService} from '../../admin/services/principal-secretary.service';
 
 @Component({
   selector: 'app-principal',
@@ -19,10 +20,28 @@ import {BreadcrumbsStyleComponent} from '../../components/breadcrumbs-style/brea
     ])
   ]
 })
-export class PrincipalOfficeComponent {
+export class PrincipalOfficeComponent  implements OnInit{
 
   principal = {
-    name: 'Dr. Ramesh Kumar Singh',
-    image: 'assets/images/principal.jpg' // Update the path to your actual image location
+    name: '',
+    image: ''
   };
+
+  constructor(private principalSecretaryService: PrincipalSecretaryService) {
+  }
+
+  ngOnInit(): void {
+    this.principalSecretaryService.getPerson('principal').subscribe({
+      next: (data: PersonData) => {
+        if(Array.isArray(data) && data.length > 0) {
+          this.principal.name = data[0].name;
+          this.principal.image = data[0].imageUrl;
+        }
+      },
+      error: (error) => {
+        console.error('Error fetching principal data:', error);
+      }
+    });
+  }
+
 }

@@ -1,0 +1,67 @@
+<div class="flex flex-col lg:flex-row gap-6">
+
+  <!-- Sidebar Tabs (Sticky on Desktop) -->
+  <div class="lg:w-1/4">
+    <div class="sticky top-24">
+      <ul class="space-y-2">
+        <li *ngFor="let sec of sections">
+          <button
+            (click)="setActiveSection(sec.key)"
+            [ngClass]="{
+              'bg-blue-600 text-white': activeSection === sec.key,
+              'bg-gray-100 text-gray-700 hover:bg-blue-100': activeSection !== sec.key
+            }"
+            class="w-full text-left px-4 py-2 rounded-md font-medium text-sm transition"
+          >
+            {{ sec.label }}
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Section Content Area -->
+  <div class="lg:w-3/4 space-y-12">
+
+    <div *ngIf="activeSection === 'principal-secretary'" id="principal-secretary">
+      <h3 class="text-xl font-semibold mb-4">Principal & Secretary Section</h3>
+      <app-upload-principal-secretary></app-upload-principal-secretary>
+    </div>
+
+    <div *ngIf="activeSection === 'sports-fitness'" id="sports-fitness">
+      <h3 class="text-xl font-semibold mb-4">Sports & Fitness Section</h3>
+      <app-achievement-upload sectionType="sports"></app-achievement-upload>
+    </div>
+
+    <div *ngIf="activeSection === 'science-innovation'" id="science-innovation">
+      <h3 class="text-xl font-semibold mb-4">Science & Innovations Section</h3>
+      <app-achievement-upload sectionType="science"></app-achievement-upload>
+    </div>
+
+    <div *ngIf="activeSection === 'faculty-staff'" id="faculty-staff">
+      <h3 class="text-xl font-semibold mb-4">Faculty & Staff Section</h3>
+      <app-faculty-upload></app-faculty-upload>
+    </div>
+
+    <div *ngIf="activeSection === 'hall-administration'" id="hall-administration">
+      <h3 class="text-xl font-semibold mb-4">Hall of Administration Section</h3>
+      <app-hall-admin-upload></app-hall-admin-upload>
+    </div>
+
+    <div *ngIf="activeSection === 'general-gallery'" id="general-gallery">
+      <h3 class="text-xl font-semibold mb-4">General Gallery Section</h3>
+      <app-general-gallery-upload></app-general-gallery-upload>
+    </div>
+
+    <div *ngIf="activeSection === 'achievement'" id="achievement">
+      <h3 class="text-xl font-semibold mb-4">Achievement Section</h3>
+      <app-achievement-upload sectionType="general"></app-achievement-upload>
+    </div>
+
+    <div *ngIf="activeSection === 'home-scroll'" id="home-scroll">
+      <h3 class="text-xl font-semibold mb-4">Homepage Scroll Banners</h3>
+      <app-homepage-banners-upload></app-homepage-banners-upload>
+    </div>
+
+  </div>
+</div>

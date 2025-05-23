@@ -1,0 +1,164 @@
+<div class="space-y-10 p-6 bg-white rounded-xl shadow-md border border-gray-200">
+
+  <!-- Principal Section -->
+  <div>
+    <div class="flex items-center justify-between mb-4">
+      <div class="flex items-center gap-2">
+        <button (click)="togglePrincipalCollapse()"
+                class="text-gray-700">
+          <fa-icon [icon]="isPrincipalCollapsed ? faChevronDown : faChevronUp" class="mr-1"></fa-icon>
+        </button>
+        <h2 class="text-xl font-semibold text-gray-800">Principal</h2>
+      </div>
+      <fa-icon [icon]="faEdit" class="text-gray-500 cursor-pointer" *ngIf="principalData && !editingPrincipal" (click)="onEdit('principal')"></fa-icon>
+    </div>
+
+    <div *ngIf="!isPrincipalCollapsed">
+      <!-- Upload Mode -->
+      <ng-container *ngIf="!principalData && !editingPrincipal">
+        <app-general-gallery-image-uploader
+          [selectedImage]="principal.imageUrl || ''"
+          (imageSelected)="onPrincipalImageSelected($event)">
+        </app-general-gallery-image-uploader>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+          <input type="text" [(ngModel)]="principal.name" placeholder="Name" class="input-style" />
+          <input type="text" [(ngModel)]="principal.designation" placeholder="Designation" class="input-style" />
+          <textarea [(ngModel)]="principal.message" rows="2" placeholder="Message" class="input-style md:col-span-3"></textarea>
+        </div>
+
+        <button
+          (click)="uploadPrincipal()"
+          class="btn-primary mt-4 flex items-center justify-center"
+          [disabled]="isLoading"
+        >
+          <ng-container *ngIf="!isLoading">
+            <fa-icon [icon]="faUpload" class="mr-2"></fa-icon> Upload
+          </ng-container>
+          <ng-container *ngIf="isLoading">
+            <svg
+              class="animate-spin h-5 w-5 text-white"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
+              <path
+                class="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 00-8 8z"
+              />
+            </svg>
+          </ng-container>
+        </button>
+
+      </ng-container>
+
+      <!-- Edit Mode -->
+      <ng-container *ngIf="principalData || editingPrincipal">
+        <app-general-gallery-image-uploader
+          [disabled]="!editingClicked"
+          [selectedImage]="principal.imageUrl || principal.imageUrl || ''"
+          (imageSelected)="onPrincipalImageSelected($event)">
+        </app-general-gallery-image-uploader>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+          <input type="text" [disabled]="!editingClicked" [(ngModel)]="principal.name" placeholder="Name" class="input-style" />
+          <input type="text" [disabled]="!editingClicked" [(ngModel)]="principal.designation" placeholder="Designation" class="input-style" />
+          <textarea [disabled]="!editingClicked" [(ngModel)]="principal.message" rows="3" placeholder="Message" class="input-style md:col-span-3"></textarea>
+        </div>
+
+        <div class="flex items-center gap-4 mt-4">
+          <button class="btn-success" (click)="savePrincipalEdit()" [hidden]="!editingClicked" >
+            <fa-icon [icon]="faCheckCircle" class="mr-2"></fa-icon> Save
+          </button>
+          <button class="btn-danger" (click)="cancelEdit('principal')" [hidden]="!editingClicked">
+            <fa-icon [icon]="faTimes" class="mr-2"></fa-icon> Cancel
+          </button>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+
+  <hr class="border-gray-300">
+
+  <!-- Secretary Section -->
+  <div>
+    <div class="flex items-center justify-between mb-4">
+      <div class="flex items-center gap-2">
+        <button (click)="toggleSecretaryCollapse()" class="text-gray-700">
+          <fa-icon [icon]="isSecretaryCollapsed ? faChevronDown : faChevronUp" class="mr-1"></fa-icon>
+        </button>
+        <h2 class="text-xl font-semibold text-gray-800">Secretary</h2>
+      </div>
+      <fa-icon [icon]="faEdit" class="text-gray-500 cursor-pointer" *ngIf="secretaryData && !editingSecretary" (click)="onEdit('secretary')"></fa-icon>
+    </div>
+
+    <div *ngIf="!isSecretaryCollapsed">
+      <!-- Upload Mode -->
+      <ng-container *ngIf="!secretaryData && !editingSecretary">
+        <app-general-gallery-image-uploader
+          [selectedImage]="secretary.imageUrl || ''"
+          (imageSelected)="onSecretaryImageSelected($event)">
+        </app-general-gallery-image-uploader>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+          <input type="text" [(ngModel)]="secretary.name" placeholder="Name" class="input-style" />
+          <input type="text" [(ngModel)]="secretary.designation" placeholder="Designation" class="input-style" />
+          <textarea [(ngModel)]="secretary.message" rows="2" placeholder="Message" class="input-style md:col-span-3"></textarea>
+        </div>
+
+        <button
+          (click)="uploadSecretary()"
+          class="btn-primary mt-4 flex items-center justify-center"
+          [disabled]="isLoading"
+        >
+          <ng-container *ngIf="!isLoading">
+            <fa-icon [icon]="faUpload" class="mr-2"></fa-icon> Upload
+          </ng-container>
+          <ng-container *ngIf="isLoading">
+            <svg
+              class="animate-spin h-5 w-5 text-white"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
+              <path
+                class="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 00-8 8z"
+              />
+            </svg>
+          </ng-container>
+        </button>
+
+      </ng-container>
+
+      <!-- Edit Mode -->
+      <ng-container *ngIf="secretaryData || editingSecretary">
+        <app-general-gallery-image-uploader
+          [disabled]="!editingClicked"
+          [selectedImage]="secretary.imageUrl || secretary.imageUrl || ''"
+          (imageSelected)="onSecretaryImageSelected($event)">
+        </app-general-gallery-image-uploader>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+          <input type="text" [disabled]="!editingClicked" [(ngModel)]="secretary.name" placeholder="Name" class="input-style" />
+          <input type="text" [disabled]="!editingClicked" [(ngModel)]="secretary.designation" placeholder="Designation" class="input-style" />
+          <textarea [disabled]="!editingClicked" [(ngModel)]="secretary.message" rows="3" placeholder="Message" class="input-style md:col-span-3"></textarea>
+        </div>
+
+        <div class="flex items-center gap-4 mt-4">
+          <button class="btn-success" (click)="saveSecretaryEdit()" [hidden]="!editingClicked">
+            <fa-icon [icon]="faCheckCircle" class="mr-2"></fa-icon> Save
+          </button>
+          <button class="btn-danger" (click)="cancelEdit('secretary')" [hidden]="!editingClicked">
+            <fa-icon [icon]="faTimes" class="mr-2"></fa-icon> Cancel
+          </button>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+
+</div>

@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ImageViewerComponent} from '../image-viewer/image-viewer.component';
 import {NgForOf, NgIf} from '@angular/common';
+import {ImageUploadService} from '../../admin/services/image-upload.service';
 
 @Component({
   selector: 'app-image-scroller',
@@ -9,23 +10,8 @@ import {NgForOf, NgIf} from '@angular/common';
   standalone: true,
   styleUrl: './image-scroller.component.scss'
 })
-export class ImageScrollerComponent {
-  scrollImages: string[] = [
-    'emrs (1).jpg',
-    'emrs (2).jpg',
-    'emrs (3).jpg',
-    'emrs (4).jpg',
-    'emrs (5).jpg',
-    'emrs (6).jpg',
-    'emrs (7).jpg',
-    'emrs (8).jpg',
-    'emrs (9).jpg',
-    'emrs (10).jpg',
-    'emrs (11).jpg',
-    'emrs (12).jpg',
-    'emrs (13).jpg',
-    'emrs (14).jpg'
-  ];
+export class ImageScrollerComponent implements OnInit{
+  scrollImages: string[] = [];
 
   selectedImageIndex: number = 0;
   imageViewerOpen = false;
@@ -45,8 +31,16 @@ export class ImageScrollerComponent {
     }
   }
 
-
   closeImageViewer() {
     this.imageViewerOpen = false;
+  }
+
+  constructor(private imageUploadService: ImageUploadService) {
+  }
+
+  ngOnInit(): void {
+    this.imageUploadService.fetchUploadedImages('home_banner').subscribe(images => {
+      this.scrollImages = images;
+    });
   }
 }

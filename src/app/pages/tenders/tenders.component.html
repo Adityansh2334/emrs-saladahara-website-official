@@ -24,6 +24,7 @@
         </tr>
         </thead>
         <tbody class="divide-y divide-gray-200">
+        <app-table-loader *ngIf="loading" [colspan]="3" [rows]="4"></app-table-loader>
         <tr *ngFor="let tender of filteredTenders" class="hover:bg-blue-50 transition">
           <td class="px-6 py-4 font-medium">{{ tender.title }}</td>
           <td class="px-6 py-4">{{ tender.date }}</td>

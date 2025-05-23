@@ -44,12 +44,13 @@
     </tr>
     </thead>
     <tbody>
+    <app-table-loader *ngIf="loading" [colspan]="3" [rows]="4"></app-table-loader>
     <tr *ngFor="let exam of paginatedExams" class="border-t border-gray-100 hover:bg-blue-50 transition">
       <td class="py-3 px-5 font-medium">{{ exam.name }}</td>
       <td class="py-3 px-5">Class {{ exam.class }}</td>
       <td class="py-3 px-5">{{ exam.date }}</td>
       <td class="py-3 px-5">
-        <ng-container *ngIf="exam.resultStatus === 'Available'; else notAvailable">
+        <ng-container>
           <a
             [href]="exam.resultUrl"
             target="_blank"
@@ -63,9 +64,6 @@
             Download
           </a>
         </ng-container>
-        <ng-template #notAvailable>
-          <span class="text-gray-400 italic">{{ exam.resultStatus }}</span>
-        </ng-template>
       </td>
     </tr>
     </tbody>

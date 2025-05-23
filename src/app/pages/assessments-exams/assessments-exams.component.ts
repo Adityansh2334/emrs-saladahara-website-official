@@ -1,8 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import { trigger, transition, style, animate } from '@angular/animations';
-import {AssessmentsExamsServiceService} from '../../services/assessments-exams-service.service';
 import {NgForOf, NgIf} from '@angular/common';
-import {FaIconComponent} from '@fortawesome/angular-fontawesome';
 import {UpcomingExamsComponent} from '../../components/upcoming-exams/upcoming-exams.component';
 import {ExamResultsComponent} from '../../components/exam-results/exam-results.component';
 import {AssignmentsComponent} from '../../components/assignments/assignments.component';
@@ -38,7 +36,7 @@ import {BreadcrumbsStyleComponent} from '../../components/breadcrumbs-style/brea
     ])
   ]
 })
-export class AssessmentsExamsComponent implements OnInit{
+export class AssessmentsExamsComponent{
 
   activeTab = 'upcomingExams';
 
@@ -46,43 +44,4 @@ export class AssessmentsExamsComponent implements OnInit{
     this.activeTab = tab;
   }
 
-  upcomingExams: any[] = [];
-  completedExams: any[] = [];
-  assessments: any[] = [];
-  motivationalResources: any[] = [];
-  expanded: Record<string, boolean> = {};
-
-  constructor(private assessmentsService: AssessmentsExamsServiceService) {}
-
-  ngOnInit() {
-    // Fetch all data on initialization
-    this.getUpcomingExams();
-    this.getCompletedExams();
-    this.getAssessments();
-  }
-
-  // Get upcoming exams data
-  getUpcomingExams() {
-    this.assessmentsService.getUpcomingExams().subscribe(data => {
-      this.upcomingExams = data;
-    });
-  }
-
-  // Get completed exams data
-  getCompletedExams() {
-    this.assessmentsService.getCompletedExams().subscribe(data => {
-      this.completedExams = data;
-    });
-  }
-
-  // Get assessments data
-  getAssessments() {
-    this.assessmentsService.getAssessments().subscribe(data => {
-      this.assessments = data;
-    });
-  }
-
-  toggleClass(cls: string) {
-    this.expanded[cls] = !this.expanded[cls];
-  }
 }

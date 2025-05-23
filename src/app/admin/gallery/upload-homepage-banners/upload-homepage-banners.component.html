@@ -1,0 +1,44 @@
+<!-- upload-homepage-banners.component.html -->
+<div *ngFor="let entry of banners; let index = index" class="p-4 bg-white rounded-2xl shadow-md mb-6">
+  <h2 class="text-lg font-semibold mb-4 text-gray-700">🎉 Homepage Banner Upload</h2>
+
+  <!-- Banner Image Upload -->
+  <app-general-gallery-image-uploader
+    [selectedImage]="entry.imageFile"
+    (imageSelected)="onImageSelected($event, index)">
+  </app-general-gallery-image-uploader>
+  <!-- Upload Progress Bar -->
+  <div *ngIf="uploadProgress[index] > 0 && uploadProgress[index] < 100" class="w-full bg-gray-200 rounded-full h-3 mt-3">
+    <div
+      class="bg-blue-600 h-3 rounded-full transition-all duration-500"
+      [style.width.%]="uploadProgress[index]">
+    </div>
+  </div>
+  <!-- Add / Submit Buttons -->
+  <div class="flex gap-4 mt-6">
+    <button
+      class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition"
+      (click)="onSubmit()"
+    >
+      <fa-icon [icon]="faUpload" class="mr-1"></fa-icon> Upload
+    </button>
+  </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div *ngIf="showDeleteConfirm" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+  <div class="bg-white rounded-xl shadow-xl p-6 w-96 animate-fadeIn">
+    <h3 class="text-lg font-semibold text-red-600">⚠️ Confirm Deletion</h3>
+    <p class="mt-2 text-gray-700">Are you sure you want to delete this image?</p>
+    <div class="mt-4 flex justify-end space-x-3">
+      <button (click)="confirmDelete()" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">Yes, Delete</button>
+      <button (click)="cancelDelete()" class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- Uploaded Images List -->
+<app-available-image-showcase
+  [imageUrls]="existingBanners"
+  (deleteImage)="onDeleteBanner($event)">
+</app-available-image-showcase>

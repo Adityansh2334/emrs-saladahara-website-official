@@ -11,21 +11,23 @@ import {AboutSectionComponent} from './components/about-section/about-section.co
 import {NotificationBoardComponent} from './components/notification-board/notification-board.component';
 import {AboveFooterComponent} from './components/above-footer/above-footer.component';
 import {AchievementGlanceComponent} from './components/achievement-glance/achievement-glance.component';
-import {FaIconComponent} from '@fortawesome/angular-fontawesome';
+import {FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons';
 import {LoaderComponent} from './components/loader/loader.component'; // Import FontAwesome icons
 import { AppInitService } from './services/app-init.service';
+import {ToastComponent} from './admin/shared/toast/toast.component';
 
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet, NavbarComponent, FooterComponent, TopBarComponent, MainBarComponent,
     ImageScrollerComponent, NgIf, AboutSectionComponent, NotificationBoardComponent,
-    AboveFooterComponent, AchievementGlanceComponent, FaIconComponent, LoaderComponent],
+    AboveFooterComponent, AchievementGlanceComponent, FaIconComponent, LoaderComponent, ToastComponent],
   templateUrl: './app.component.html',
   standalone: true,
   styleUrl: './app.component.scss'
 })
 export class AppComponent implements OnInit {
+  showLayout = true;
   // existing properties...
   isLoading = true;
   title = 'emrs-saladahara-website';
@@ -42,7 +44,9 @@ export class AppComponent implements OnInit {
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe((event: NavigationEnd) => {
         this.isHomePage = event.urlAfterRedirects === '/' || event.url === '/';
-
+        // Hide layout for any /admin/** routes (except /admin/login optionally)
+        const url = (event as NavigationEnd).urlAfterRedirects;
+        this.showLayout = !url.startsWith('/admin');
         // Scroll to top when navigating to any page, only in the browser
         if (isPlatformBrowser(this.platformId)) {
           window.scrollTo(0, 0);

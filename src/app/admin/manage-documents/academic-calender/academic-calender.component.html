@@ -1,0 +1,218 @@
+<div class="p-6 bg-white rounded-2xl shadow space-y-8">
+  <!-- Header -->
+  <h2 class="text-2xl font-semibold text-gray-800 flex items-center gap-2">
+    <fa-icon [icon]="faCalendarDays" class="text-indigo-600" />
+    Academic Calendar Management
+  </h2>
+
+  <!-- PDF Upload Section -->
+  <div class="space-y-2">
+    <label class="block font-medium text-gray-700">Upload Academic Calendar PDF <span class="text-red-500">*</span></label>
+    <label
+      for="calendar-pdf"
+      class="flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-md shadow hover:bg-indigo-700 cursor-pointer w-fit"
+    >
+      <fa-icon [icon]="faFilePdf" class="text-white" />
+      <span>{{ selectedPdfFileName }}</span>
+      <input
+        type="file"
+        id="calendar-pdf"
+        accept="application/pdf"
+        (change)="onPdfSelected($event)"
+        hidden
+      />
+    </label>
+    <div *ngIf="pdfError" class="text-sm text-red-600 mt-1">
+      {{ pdfError }}
+    </div>
+  </div>
+
+  <!-- Add Calendar Event Entry -->
+  <div class="space-y-2">
+    <h3 class="text-lg font-semibold text-gray-700 flex items-center gap-2">
+      <fa-icon [icon]="faPlusCircle" class="text-indigo-500" />
+      Add Academic Event
+    </h3>
+
+    <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-4">
+      <select
+        class="input"
+        [(ngModel)]="newEvent.month"
+      >
+        <option value="" disabled selected>Select Month</option>
+        <option *ngFor="let month of months" [value]="month">{{ month }}</option>
+      </select>
+
+      <input type="text" class="input" placeholder="Title" [(ngModel)]="newEvent.title" />
+        <input
+          type="number"
+          class="input"
+          min="1"
+          max="31"
+          [(ngModel)]="newEvent.day"
+          placeholder="Enter day (1–31)"
+        />
+      <select class="input" [(ngModel)]="newEvent.type">
+        <option disabled selected value="">Type</option>
+        <option>Holiday</option>
+        <option>Event</option>
+        <option>Exam</option>
+      </select>
+    </div>
+
+    <button
+      class="mt-3 bg-green-600 text-white px-4 py-2 rounded-md shadow hover:bg-green-700 transition"
+      (click)="addCalendarEvent()"
+    >
+      <fa-icon [icon]="faPlus" class="mr-1" /> Add Event
+    </button>
+  </div>
+
+  <!-- Event Preview List -->
+  <div *ngIf="calendarEvents.length" class="space-y-2">
+    <h3 class="text-lg font-semibold text-gray-700 flex items-center gap-2">
+      <fa-icon [icon]="faListAlt" class="text-blue-500" />
+      Preview Academic Events
+    </h3>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div
+        *ngFor="let event of calendarEvents; let i = index"
+        class="bg-gray-100 p-4 rounded-xl shadow-sm flex flex-col justify-between"
+      >
+        <div>
+          <div class="font-medium text-gray-800">{{ event.title }}</div>
+          <div class="text-sm text-gray-600 mt-1">{{ event.date }} • {{ event.month }}</div>
+        </div>
+        <div class="flex justify-between items-center mt-3">
+          <span
+            class="text-xs font-semibold px-2 py-1 rounded-full"
+            [ngClass]="{
+              'bg-yellow-100 text-yellow-800': event.type === 'Holiday',
+              'bg-blue-100 text-blue-800': event.type === 'Event',
+              'bg-red-100 text-red-800': event.type === 'Exam'
+            }"
+          >
+            {{ event.type }}
+          </span>
+          <button
+            class="text-red-500 hover:text-red-700"
+            (click)="removeCalendarEvent(i)"
+          >
+            <fa-icon [icon]="faTrashAlt" />
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Submit Button -->
+  <div class="pt-4 border-t">
+    <button
+      class="bg-indigo-600 text-white px-6 py-2 rounded-md shadow hover:bg-indigo-700 transition flex items-center justify-center gap-2"
+      (click)="submitAcademicCalendar()"
+      [disabled]="existingEvents.events.length || isSubmittingCalendar"
+    >
+      <ng-container *ngIf="!isSubmittingCalendar">
+        <fa-icon [icon]="faSave" class="mr-1" />
+        Save Academic Calendar
+      </ng-container>
+      <ng-container *ngIf="isSubmittingCalendar">
+        <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
+             viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10"
+                  stroke="currentColor" stroke-width="4" />
+          <path class="opacity-75" fill="currentColor"
+                d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 00-8 8z" />
+        </svg>
+        Saving...
+      </ng-container>
+    </button>
+  </div>
+
+  <!-- Loader -->
+  <div *ngIf="isLoadingEvents" class="flex justify-center items-center py-10">
+    <svg class="animate-spin h-6 w-6 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none"
+         viewBox="0 0 24 24">
+      <circle class="opacity-25" cx="12" cy="12" r="10"
+              stroke="currentColor" stroke-width="4" />
+      <path class="opacity-75" fill="currentColor"
+            d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 00-8 8z" />
+    </svg>
+  </div>
+
+  <!-- Previously Saved Events -->
+  <div class="pt-10 border-t mt-8" *ngIf="!isLoadingEvents && existingEvents?.events?.length">
+    <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+      <fa-icon [icon]="faListAlt" class="text-indigo-500" /> Saved Calendar Events
+    </h3>
+
+    <!-- Saved Calendar PDF Preview -->
+    <div class="pt-10 border-t mt-8" *ngIf="existingPdfUrl">
+      <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+        <fa-icon [icon]="faFilePdf" class="text-red-500" />
+        Saved Calendar PDF
+        <a [href]="existingPdfUrl" target="_blank" class="text-indigo-600 underline text-sm flex items-center gap-1">
+          <fa-icon [icon]="faEye" class="text-indigo-500" /> Preview Uploaded PDF
+        </a>
+      </h3>
+    </div>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div
+        *ngFor="let event of existingEvents.events; let i = index"
+        class="bg-white border rounded-xl shadow-sm p-4 space-y-2"
+      >
+        <div class="text-gray-800 font-medium">{{ event.title }}</div>
+        <div class="text-sm text-gray-600">{{ event.date }} • {{ event.month }}</div>
+        <div
+          class="text-xs inline-block px-2 py-1 rounded-full"
+          [ngClass]="{
+          'bg-yellow-100 text-yellow-700': event.type === 'Holiday',
+          'bg-blue-100 text-blue-700': event.type === 'Event',
+          'bg-red-100 text-red-700': event.type === 'Exam'
+        }"
+        >
+          {{ event.type }}
+        </div>
+      </div>
+      <div class="flex justify-end gap-2 mt-2">
+        <button (click)="showDeleteModal()" class="text-red-500 hover:text-red-700">
+          <fa-icon [icon]="faTrashAlt" />
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Confirmation Modal -->
+<div *ngIf="showDeleteConfirm" class="fixed inset-0 bg-gray-500 bg-opacity-50 flex items-center justify-center z-50">
+  <div class="bg-white p-6 rounded shadow-lg max-w-sm w-full">
+    <h2 class="text-lg font-semibold mb-4">Are you sure you want to delete calendar events?</h2>
+    <div class="flex justify-between">
+      <button
+        [disabled]="isDeleting"
+        (click)="deleteEvent(existingEvents.id,existingEvents.calendarPdfUrl)"
+        class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 flex items-center justify-center gap-2"
+      >
+        <ng-container *ngIf="!isDeleting; else loading">
+          Yes, Delete
+        </ng-container>
+        <ng-template #loading>
+          <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor"
+                  d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 00-8 8z"/>
+          </svg>
+        </ng-template>
+      </button>
+      <button
+        (click)="cancelDelete()"
+        class="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500"
+      >
+        Cancel
+      </button>
+    </div>
+  </div>
+</div>

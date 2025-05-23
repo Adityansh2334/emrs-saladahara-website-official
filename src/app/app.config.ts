@@ -5,12 +5,15 @@ import { provideClientHydration, withEventReplay } from '@angular/platform-brows
 import { AppInitService } from './services/app-init.service';
 import { provideZoneChangeDetection } from '@angular/core';
 import { inject as angularInject } from '@angular/core';
+import {provideHttpClient, withFetch, withInterceptors} from '@angular/common/http';
+import {AuthInterceptor} from './admin/interceptors/jwt.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideClientHydration(withEventReplay()),
+    provideHttpClient(withFetch (),withInterceptors([AuthInterceptor])),
 
     {
       provide: 'APP_READY',

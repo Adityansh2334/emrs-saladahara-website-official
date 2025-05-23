@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import { trigger, transition, style, animate } from '@angular/animations';
 import {NgClass, NgForOf} from '@angular/common';
 import {FaIconComponent} from '@fortawesome/angular-fontawesome';
 import {BreadcrumbsStyleComponent} from '../../components/breadcrumbs-style/breadcrumbs-style.component';
 import { faDownload } from '@fortawesome/free-solid-svg-icons';
+import {AcademicCalendarService} from '../../admin/services/calendar.servcie';
 
 @Component({
   selector: 'app-academic-calendar',
@@ -26,25 +27,30 @@ import { faDownload } from '@fortawesome/free-solid-svg-icons';
   ]
 })
 
-export class AcademicCalendarComponent {
+export class AcademicCalendarComponent implements OnInit{
   faDownload= faDownload
-  calendarPdfUrl = '/assets/docs/academic-calendar-2025.pdf'; // <-- dynamic path from TS
+  calendarPdfUrl = ''; // <-- dynamic path from TS
 
   calendarEvents = [
-    { month: 'January', title: 'Winter Break Ends', date: '10 Jan 2025', type: 'Holiday' },
-    { month: 'February', title: 'Unit Test I Begins', date: '05 Feb 2025', type: 'Exam' },
-    { month: 'March', title: 'Science Exhibition', date: '12 Mar 2025', type: 'Event' },
-    { month: 'April', title: 'Final Exams', date: '15 Apr 2025', type: 'Exam' },
-    { month: 'May', title: 'Summer Vacation Starts', date: '01 May 2025', type: 'Holiday' },
-    { month: 'June', title: 'School Reopens', date: '15 Jun 2025', type: 'Event' },
-    { month: 'August', title: 'Independence Day Celebration', date: '15 Aug 2025', type: 'Event' },
-    { month: 'November', title: 'Birsa Munda Jayanti', date: '15 Nov 2025', type: 'Event' },
+    {
+      date:'',
+      month: '',
+      title: '',
+      type: ''
+    }
   ];
 
   // Extract year from the first event's date
   calendarYear: string;
 
-  constructor() {
+  constructor(private calendarService: AcademicCalendarService) {
     this.calendarYear = new Date().getFullYear().toString();
   }
+
+  ngOnInit(): void {
+    this.calendarService.getCalendarData().subscribe(events => {
+      this.calendarEvents = events.events;
+      this.calendarPdfUrl = events.calendarPdfUrl;
+    });
+    }
 }

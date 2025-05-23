@@ -39,6 +39,7 @@
       </thead>
 
       <tbody>
+      <app-table-loader *ngIf="loading" [colspan]="3" [rows]="4"></app-table-loader>
       <tr *ngFor="let exam of paginatedUpcomingExams" class="border-t border-gray-100 hover:bg-indigo-50 transition">
         <td class="py-3 px-5 font-medium">{{ exam.name }}</td>
         <td class="py-3 px-5">Class {{ exam.class }}</td>

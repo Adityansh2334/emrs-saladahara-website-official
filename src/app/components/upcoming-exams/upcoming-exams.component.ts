@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {NgClass, NgForOf, NgIf} from '@angular/common';
-import {start} from 'node:repl';
+import {UpcomingExamService} from '../../admin/services/upcoming-exam.service';
+import {TableLoaderComponent} from '../../admin/shared/table-loader/table-loader.component';
 
 @Component({
   selector: 'app-upcoming-exams',
@@ -9,7 +10,8 @@ import {start} from 'node:repl';
   imports: [
     NgForOf,
     NgClass,
-    NgIf
+    NgIf,
+    TableLoaderComponent
   ],
   styleUrls: ['./upcoming-exams.component.scss']
 })
@@ -18,17 +20,17 @@ export class UpcomingExamsComponent implements OnInit {
   sortDirection: 'asc' | 'desc' = 'asc';
 
   upcomingExams = [
-    { name: 'First Term Exam', class: '6', date: '2025-06-10', time: '10:00 AM' },
-    { name: 'Mid Term Exam', class: '7', date: '2025-06-15', time: '11:00 AM' },
-    { name: 'Final Exam', class: '8', date: '2025-07-01', time: '09:00 AM' },
-    { name: 'Unit Test 1', class: '9', date: '2025-07-10', time: '12:00 PM' },
-    { name: 'Quarterly Exam', class: '10', date: '2025-07-20', time: 'TBD' },
-    { name: 'Mock Exam', class: '10', date: '2025-07-25', time: '10:30 AM' },
-    // ... Add more as needed
+    {
+      name: '',
+      class: '',
+      date: '',
+      time: ''
+    }
   ];
 
   upcomingPage = 1;
   upcomingItemsPerPage = 5;
+  loading = false;
 
   get paginatedUpcomingExams() {
     const start = (this.upcomingPage - 1) * this.upcomingItemsPerPage;
@@ -67,7 +69,25 @@ export class UpcomingExamsComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
+  constructor(private upcomingExamsService: UpcomingExamService) {
   }
 
+  ngOnInit(): void {
+    this.loading = true;
+    this.upcomingExamsService.getExams().subscribe(data => {
+      let upcomingExams: { name: string; class: string; date: string; time: string; }[] = [];
+      data.forEach(exam => {
+        upcomingExams.push({
+          name: exam.name,
+          class: exam.classLevel,
+          date: exam.date,
+          time: exam.time
+        });
+      });
+      this.upcomingExams = upcomingExams;
+      this.sortUpcomingExams();
+      this.loading = false;
+        }
+      );
+  }
 }

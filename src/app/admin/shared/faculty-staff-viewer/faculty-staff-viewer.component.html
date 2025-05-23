@@ -1,0 +1,115 @@
+<!-- Edit Faculty Modal -->
+<div *ngIf="editingFaculty" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 overflow-y-auto">
+  <div class="bg-white p-6 rounded-2xl border border-indigo-200 shadow-lg max-w-xl w-full relative max-h-[90vh] overflow-y-auto custom-scrollbar">
+    <button class="absolute top-2 right-2 text-gray-500 hover:text-red-600" (click)="cancelEdit()">
+      ✖
+    </button>
+    <h2 class="text-xl font-semibold text-gray-800 mb-5 flex items-center gap-2">✏️ Edit Faculty</h2>
+
+    <!-- Image Upload -->
+    <div class="mb-5">
+      <label class="block mb-1 text-sm font-medium text-gray-700">Upload Image</label>
+      <input type="file" accept="image/*" (change)="onImageSelectedEdit($event)"
+             class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100" />
+      <div *ngIf="editingFaculty.image" class="mt-3">
+        <img [src]="editingFaculty.image" alt="Preview" class="rounded-lg w-full max-h-64 object-contain border" />
+      </div>
+      <p *ngIf="editingFaculty.image === ''" class="text-red-500 text-sm mt-1">Image is required.</p>
+    </div>
+
+    <!-- Name -->
+    <div class="mb-4">
+      <label class="block text-sm font-medium text-gray-700">Name</label>
+      <input [(ngModel)]="editingFaculty.name"
+             class="w-full px-3 py-2 text-sm border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-300"
+             placeholder="Enter name" />
+      <p *ngIf="editingFaculty.name === ''" class="text-red-500 text-sm mt-1">Name is required.</p>
+    </div>
+
+    <!-- Designation -->
+    <div class="mb-4">
+      <label class="block text-sm font-medium text-gray-700">Designation</label>
+      <input [(ngModel)]="editingFaculty.designation"
+             class="w-full px-3 py-2 text-sm border rounded-lg shadow-sm" placeholder="Enter designation" />
+      <p *ngIf="editingFaculty.designation === ''" class="text-red-500 text-sm mt-1">Designation is required.</p>
+    </div>
+
+    <!-- Category -->
+    <div class="mb-5">
+      <label class="block mb-1 font-medium text-sm text-gray-700">Category</label>
+      <select
+        [(ngModel)]="editingFaculty.category"
+        class="w-full px-3 py-2 text-sm border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-300">
+        <option value="" disabled>Select category</option>
+        <option value="Teaching">Teaching</option>
+        <option value="Non-Teaching">Non-Teaching</option>
+      </select>
+      <p *ngIf="editingFaculty.category === ''" class="text-red-500 text-sm mt-1">Category is required.</p>
+    </div>
+
+    <!-- Bio -->
+    <div class="mb-4">
+      <label class="block text-sm font-medium text-gray-700">Bio</label>
+      <textarea [(ngModel)]="editingFaculty.bio" rows="4"
+                class="w-full px-3 py-2 text-sm border rounded-lg shadow-sm"></textarea>
+      <p *ngIf="editingFaculty.bio === ''" class="text-red-500 text-sm mt-1">Bio is required.</p>
+    </div>
+
+    <div class="flex justify-end gap-4 mt-6">
+      <button class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700" (click)="onSaveEdit()">
+        <fa-icon [icon]="faCheckCircle" class="mr-1"></fa-icon> Save
+      </button>
+      <button class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600" (click)="cancelEdit()">
+        Cancel
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Faculty List -->
+<div *ngIf="paginatedFaculty.length > 0; else noFaculty">
+  <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+    <div *ngFor="let faculty of paginatedFaculty; let index = index" class="bg-white rounded-xl shadow hover:shadow-md transition p-4 relative">
+      <img [src]="faculty.image" alt="{{faculty.name}}"
+           class="w-full h-48 object-cover rounded-lg mb-4">
+
+      <div class="space-y-1">
+        <h3 class="text-lg font-semibold text-gray-800">{{ faculty.name }}</h3>
+        <p class="text-sm text-gray-600">{{ faculty.designation }}</p>
+        <p class="text-sm text-gray-500 italic">{{ faculty.category }}</p>
+        <p class="text-sm text-gray-700 mt-2">{{ faculty.bio }}</p>
+      </div>
+
+      <div class="absolute top-2 right-2 flex space-x-2">
+        <button (click)="onEdit(faculty, index)" class="text-blue-600 hover:text-blue-800 transition">
+          <fa-icon [icon]="penIcon"></fa-icon>
+        </button>
+        <button (click)="onDelete(faculty.id,faculty.image)" class="text-red-600 hover:text-red-800 transition">
+          <fa-icon [icon]="trashIcon"></fa-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pagination -->
+  <div class="flex justify-center gap-2 mt-6" *ngIf="totalPages > 1">
+    <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1"
+            class="px-3 py-1 rounded bg-gray-200 text-gray-700 hover:bg-gray-300 disabled:opacity-50">Prev</button>
+
+    <button *ngFor="let page of [].constructor(totalPages); let i = index"
+            (click)="changePage(i + 1)"
+            [class.bg-indigo-600]="currentPage === i + 1"
+            [class.text-white]="currentPage === i + 1"
+            class="px-3 py-1 rounded hover:bg-indigo-500 hover:text-white transition">
+      {{ i + 1 }}
+    </button>
+
+    <button (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages"
+            class="px-3 py-1 rounded bg-gray-200 text-gray-700 hover:bg-gray-300 disabled:opacity-50">Next</button>
+  </div>
+</div>
+
+<!-- Empty State -->
+<ng-template #noFaculty>
+  <div class="text-center py-12 text-gray-500">No faculty records available yet.</div>
+</ng-template>

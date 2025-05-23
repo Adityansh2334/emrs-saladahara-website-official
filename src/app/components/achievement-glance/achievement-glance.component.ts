@@ -1,9 +1,8 @@
-import { Component, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild, OnInit } from '@angular/core';
 import { NgForOf } from '@angular/common';
 import SwiperCore, { Navigation, Pagination, Autoplay } from 'swiper';
-
 import Swiper from 'swiper';
-import 'swiper/swiper-bundle.min.css';
+import { AchievementService } from '../../admin/services/achievement.service';
 
 // Initialize Swiper modules
 SwiperCore.use([Navigation, Pagination, Autoplay]);
@@ -11,20 +10,15 @@ SwiperCore.use([Navigation, Pagination, Autoplay]);
 @Component({
   selector: 'app-achievement-glance',
   standalone: true,
-  imports: [NgForOf], // Only standalone components or directives here
+  imports: [NgForOf],
   templateUrl: './achievement-glance.component.html',
   styleUrls: ['./achievement-glance.component.scss']
 })
-export class AchievementGlanceComponent implements AfterViewInit {
-  @ViewChild('swiper-container') swiperContainer: ElementRef | undefined;
+export class AchievementGlanceComponent implements OnInit {
+  @ViewChild('swiperContainer', { static: false }) swiperContainer!: ElementRef;
 
-  achievements = [
-    { image: 'emrs (1).jpg', caption: 'Students won regional science fair' },
-    { image: 'emrs (2).jpg', caption: 'Annual sports champions 2024' },
-    { image: 'emrs (3).jpg', caption: 'Smart classroom inauguration' },
-    { image: 'emrs (4).jpg', caption: 'Clean school award 2023' },
-    { image: 'emrs (5).jpg', caption: 'Art competition winners' }
-  ];
+  achievements: { caption: string; image: string }[] = [];
+
   govLinks = [
     {
       title: 'National Portal of India',
@@ -37,7 +31,8 @@ export class AchievementGlanceComponent implements AfterViewInit {
       image: 'mta.jpeg'
     },
     {
-      title: 'TDD, Odisha',      url: 'https://stsc.odisha.gov.in/',
+      title: 'TDD, Odisha',
+      url: 'https://stsc.odisha.gov.in/',
       image: 'tdd.jpeg'
     },
     {
@@ -52,10 +47,29 @@ export class AchievementGlanceComponent implements AfterViewInit {
     }
   ];
 
+  constructor(private achievementService: AchievementService) {}
 
+  ngOnInit(): void {
+    this.achievementService.fetchAchievements('general').then((achievements) => {
+      const achv: { caption: string; image: string }[] = [];
+      achievements.forEach((achievement) => {
+        achv.push({
+          caption: achievement.description,
+          image: achievement.coverImage
+        });
+      });
 
-  ngAfterViewInit() {
-    const swiper = new Swiper('.swiper-container', {
+      this.achievements = achv;
+
+      // Delay to ensure DOM is rendered before initializing Swiper
+      setTimeout(() => {
+        this.initializeSwiper();
+      }, 100);
+    });
+  }
+
+  initializeSwiper() {
+    new Swiper('.swiper-container', {
       slidesPerView: 1,
       spaceBetween: 10,
       loop: true,

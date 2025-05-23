@@ -1,0 +1,162 @@
+<div class="space-y-6">
+  <!-- Upload Result Form -->
+  <div class="space-y-2">
+    <h3 class="text-lg font-semibold text-gray-700 flex items-center gap-2">
+      <fa-icon [icon]="faUpload" class="text-indigo-500" />
+      Upload Completed Exam Result
+    </h3>
+
+    <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-4">
+      <input
+        type="text"
+        class="input"
+        placeholder="Exam Name *"
+        [(ngModel)]="newResult.name"
+        required
+      />
+      <select
+        class="input"
+        [(ngModel)]="newResult.classLevel"
+      >
+        <option value="" disabled selected>Class (1–12) *</option>
+        <option *ngFor="let cls of classOptions" [value]="cls">{{ cls }}</option>
+      </select>
+      <input
+        type="date"
+        [max]="maxdate"
+        class="input"
+        [(ngModel)]="newResult.date"
+        required
+      />
+      <label
+        class="flex items-center gap-2 bg-white border border-gray-300 rounded-lg px-4 py-2 shadow-sm cursor-pointer hover:bg-gray-50 transition"
+      >
+        <fa-icon [icon]="faUpload" class="text-indigo-600" />
+        <span class="text-sm text-gray-700 truncate">
+        {{ selectedFileName }}
+        </span>
+        <input
+          type="file"
+          accept="application/pdf"
+          (change)="onFileSelected($event)"
+          hidden
+        />
+      </label>
+
+    </div>
+
+    <button
+      class="mt-3 bg-green-600 text-white px-4 py-2 rounded-md shadow hover:bg-green-700 transition"
+      (click)="addResultLocally()"
+    >
+      <fa-icon [icon]="faPlus" class="mr-1" /> Add Result
+    </button>
+  </div>
+
+  <!-- Preview Before Upload -->
+  <div class="pt-6 border-t mt-8" *ngIf="pendingResults.length">
+    <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+      <fa-icon [icon]="faListAlt" class="text-indigo-500" /> Results to Upload
+    </h3>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div
+        *ngFor="let result of pendingResults; let i = index"
+        class="bg-white border rounded-xl shadow-sm p-4 space-y-2"
+      >
+        <div class="font-medium text-gray-800">{{ result.name }}</div>
+        <div class="text-sm text-gray-600">Class: {{ result.classLevel }}</div>
+        <div class="text-sm text-gray-600">Date: {{ result.date }}</div>
+        <div class="text-sm text-gray-600">File: {{ tempFilename }}</div>
+
+        <div class="flex justify-end mt-2">
+          <button (click)="removePendingResult(i)" class="text-red-500 hover:text-red-700">
+            <fa-icon [icon]="faTrashAlt" />
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <button
+      class="mt-6 bg-blue-600 text-white px-4 py-2 rounded-md shadow hover:bg-blue-700 transition"
+      (click)="uploadResults()"
+    >
+      <fa-icon [icon]="faCloudUploadAlt" class="mr-2" />
+      Upload Results
+    </button>
+  </div>
+
+  <!-- Saved Results -->
+  <div class="pt-10 border-t mt-8">
+    <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+      <fa-icon [icon]="faListAlt" class="text-indigo-500" /> Uploaded Results
+    </h3>
+
+    <!-- Loader -->
+    <div *ngIf="isLoadingResults" class="flex justify-center py-8">
+      <svg class="animate-spin h-8 w-8 text-indigo-500" xmlns="http://www.w3.org/2000/svg" fill="none"
+           viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
+        <path class="opacity-75" fill="currentColor"
+              d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 00-8 8z" />
+      </svg>
+    </div>
+
+    <!-- Result Cards -->
+    <div *ngIf="!isLoadingResults && savedResults.length" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div *ngFor="let result of savedResults" class="bg-white border rounded-xl shadow-sm p-4 space-y-2">
+        <div class="font-medium text-gray-800">{{ result.name }}</div>
+        <div class="text-sm text-gray-600">Class: {{ result.classLevel }}</div>
+        <div class="text-sm text-gray-600">Date: {{ result.date }}</div>
+        <a class="text-blue-600 text-sm underline" [href]="result.resultUrl" target="_blank">
+          Download Result
+        </a>
+
+        <div class="flex justify-end mt-2">
+          <button (click)="deleteResult(result.id!, result.resultUrl)" class="text-red-500 hover:text-red-700">
+            <fa-icon [icon]="faTrashAlt" />
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- No Results -->
+    <div *ngIf="!isLoadingResults && !savedResults.length" class="text-gray-500 italic py-4">
+      No results uploaded yet.
+    </div>
+  </div>
+
+</div>
+
+<!-- Confirmation Modal -->
+<div *ngIf="showDeleteConfirm" class="fixed inset-0 bg-gray-500 bg-opacity-50 flex items-center justify-center z-50">
+  <div class="bg-white p-6 rounded shadow-lg max-w-sm w-full">
+    <h2 class="text-lg font-semibold mb-4">Are you sure you want to delete exams results?</h2>
+    <div class="flex justify-between">
+      <button
+        [disabled]="isDeleting"
+        (click)="confirmDeleteResult()"
+        class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 flex items-center justify-center gap-2"
+      >
+        <ng-container *ngIf="!isDeleting; else loading">
+          Yes, Delete
+        </ng-container>
+        <ng-template #loading>
+          <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor"
+                  d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 00-8 8z"/>
+          </svg>
+        </ng-template>
+      </button>
+      <button
+        (click)="cancelDelete()"
+        class="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500"
+      >
+        Cancel
+      </button>
+    </div>
+  </div>
+</div>
+
+

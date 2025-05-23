@@ -1,50 +1,32 @@
-import { Component, OnInit } from '@angular/core';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { NgSelectComponent } from '@ng-select/ng-select';
+import {Component, OnInit} from '@angular/core';
+import {NgClass, NgForOf, NgIf} from '@angular/common';
+import {FormsModule} from '@angular/forms';
+import {NgSelectComponent} from '@ng-select/ng-select';
+import {ExamResultService} from '../../admin/services/exam-result.service';
+import {TableLoaderComponent} from "../../admin/shared/table-loader/table-loader.component";
 
 @Component({
   selector: 'app-exam-results',
   templateUrl: './exam-results.component.html',
   standalone: true,
-  imports: [
-    NgForOf,
-    NgIf,
-    NgClass,
-    FormsModule,
-    NgSelectComponent
-  ],
+    imports: [
+        NgForOf,
+        NgIf,
+        NgClass,
+        FormsModule,
+        NgSelectComponent,
+        TableLoaderComponent
+    ],
   styleUrls: ['./exam-results.component.scss']
 })
 export class ExamResultsComponent implements OnInit {
   completedExams = [
     {
-      name: 'Mid Term Exam',
-      class: '8',
-      date: '2025-03-15',
-      resultStatus: 'Available',
-      resultUrl: '/assets/results/midterm-class8.pdf'
-    },
-    {
-      name: 'Final Exam',
-      class: '9',
-      date: '2025-04-25',
-      resultStatus: 'Pending'
-    },
-    {
-      name: 'Mid Term Exam',
-      class: '8',
-      date: '2025-03-15',
-      resultStatus: 'Available',
-      resultUrl: '/assets/results/midterm-class8.pdf'
-    },
-    {
-      name: 'Final Exam',
-      class: '9',
-      date: '2025-04-25',
-      resultStatus: 'Pending'
-    },
-    // Add more exam data as needed...
+      name: '',
+      class: '',
+      date: '',
+      resultUrl: ''
+    }
   ];
 
   // Filter-related variables
@@ -54,6 +36,7 @@ export class ExamResultsComponent implements OnInit {
 
   examClassList:any[] = [];
   examNameList:any[] = [];
+  loading = false;
 
   // Pagination
   currentPage = 1;
@@ -86,17 +69,37 @@ export class ExamResultsComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void {
-    // Initialize any data or logic here
-    this.examClassList = [...new Set(this.completedExams.map(a => a.class))].map(c => ({
-      label: `Class ${c}`,
-      value: c,
-    }));
+  constructor(private examService: ExamResultService) {
+  }
 
-    this.examNameList = [...new Set(this.completedExams.map(a => a.name))].map(s => ({
-      label: s,  // Just the subject name, no "Class" prefix here
-      value: s,
-    }));
+  ngOnInit(): void {
+    this.loading = true;
+    this.examService.getResults().subscribe({
+      next: (data) => {
+        this.completedExams = data.map(exam => ({
+          name: exam.name,
+          class: exam.classLevel,
+          date: exam.date,
+          resultUrl: exam.resultUrl
+        }));
+
+        this.examClassList = [...new Set(this.completedExams.map(a => a.class))].map(c => ({
+          label: `Class ${c}`,
+          value: c,
+        }));
+
+        this.examNameList = [...new Set(this.completedExams.map(a => a.name))].map(s => ({
+          label: s,
+          value: s,
+        }));
+
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error('Failed to load exam results:', err);
+        this.loading = false;
+      }
+    });
   }
 
   // This function can be used to handle any filter changes and pagination reset

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {MessageModalComponent} from '../message-modal/message-modal.component';
 import {NgIf} from '@angular/common';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
@@ -9,6 +9,7 @@ import {
   style,
   animate
 } from '@angular/animations';
+import {PrincipalSecretaryService} from '../../admin/services/principal-secretary.service';
 
 @Component({
   selector: 'app-about-section',
@@ -46,51 +47,73 @@ import {
   standalone: true,
   styleUrl: './about-section.component.scss'
 })
-export class AboutSectionComponent {
+export class AboutSectionComponent  implements OnInit {
   faArrowRight = faArrowRight;
   modalOpen = false;
   modalMessage = '';
   modalTitle = '';
   modalAuthor = '';
 
+  private readonly principalMessage = 'Here is the message from the Principal In-Charge...';
+  private readonly principalSecretaryMessage = 'Here is the message from the Principal Secretary...';
+
+  private principalDeepMessage: string = '';
+  private principalSecretaryDeepMessage: string = '';
+  private principalModalAuthor: string = '';
+  private principalSecretaryModalAuthor: string = '';
+
   principalSecretary = {
-    name: 'Shri Sanjeeb Kumar Mishra, IAS',
-    designation: 'Principal Secretary',
-    image: 'principal_secretery.png', // or from backend
-    message: 'Here is the message from the Principal Secretary...'
+    name: '',
+    designation: '',
+    image: '',
+    message: this.principalSecretaryMessage
   };
 
   principal = {
-    name: 'Mr. Krushna Chandra Behera',
-    designation: 'Principal In-Charge',
-    image: 'prin_img.jpeg', // or from backend
-    message: 'Here is the message from the Principal In-Charge...'
+    name: '',
+    designation: '',
+    image: '',
+    message: this.principalMessage
   };
 
   openMessage(name: string, title: string): void {
-    if (name === 'Shri Sanjeeb Kumar Mishra, IAS') {
+    if (name === 'secretary') {
       this.modalTitle = title;
-      this.modalMessage = `You carry within you the strength of your heritage, the wisdom of your ancestors, and the power to shape a future of dignity and success. Never let circumstances define your limits—your dreams are valid, and your aspirations are powerful.
-
-Education is your strongest tool—use it not just to rise, but to lift your community along with you. Your identity is a source of pride, and your journey is a story the world needs to hear.
-
-The government is with you, and we are committed to ensuring that no dream remains out of reach. Believe in yourself, stay curious, stay courageous—and always remember, the roots you come from are the wings that will help you soar.
-
-The future of our nation lies in your hands—make it bright, make it yours.`;
-      this.modalAuthor = 'Shri Sanjeeb Kumar Mishra';
-    } else if (name === 'Mr. Krushna Chandra Behera') {
+      this.modalMessage = this.principalSecretaryDeepMessage;
+      this.modalAuthor = this.principalSecretaryModalAuthor;
+    } else if (name === 'principal') {
       this.modalTitle = title;
-      this.modalMessage = `As Principal In-Charge of EMRS Saladahara, I take great pride in your achievements and resilience. This institution was built to empower you with knowledge, discipline, and a spirit of excellence.
-
-Continue to work hard, stay focused, and remember that your efforts today shape the future for your communities tomorrow.
-
-With best wishes.`;
-      this.modalAuthor = 'Mr. Krushna Chandra Behera';
+      this.modalMessage = this.principalDeepMessage;
+      this.modalAuthor = this.principalModalAuthor;
     }
     this.modalOpen = true;
   }
 
   closeModal(): void {
     this.modalOpen = false;
+  }
+
+  constructor(private principalSecretaryService: PrincipalSecretaryService) {
+  }
+
+  ngOnInit(): void {
+    this.principalSecretaryService.getPerson('principal').subscribe(principalSecretary => {
+      if(Array.isArray(principalSecretary) && principalSecretary.length > 0) {
+        this.principal.designation = principalSecretary[0].designation;
+        this.principal.name = principalSecretary[0].name;
+        this.principal.image = principalSecretary[0].imageUrl;
+        this.principalDeepMessage = principalSecretary[0].message;
+        this.principalModalAuthor = principalSecretary[0].name;
+      }
+    });
+    this.principalSecretaryService.getPerson('secretary').subscribe(principalSecretary => {
+      if(Array.isArray(principalSecretary) && principalSecretary.length > 0) {
+        this.principalSecretary.designation = principalSecretary[0].designation;
+        this.principalSecretary.name = principalSecretary[0].name;
+        this.principalSecretary.image = principalSecretary[0].imageUrl;
+        this.principalSecretaryDeepMessage = principalSecretary[0].message;
+        this.principalSecretaryModalAuthor = principalSecretary[0].name;
+      }
+    })
   }
 }

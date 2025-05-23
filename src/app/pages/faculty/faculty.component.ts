@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import { faUserTie, faChalkboardTeacher, faUsers } from '@fortawesome/free-solid-svg-icons';
 import {LazyLoadImageModule} from 'ng-lazyload-image';
 import {NgClass, NgForOf, NgIf} from '@angular/common';
@@ -9,6 +9,7 @@ import {
   style,
   animate
 } from '@angular/animations';
+import {FacultyService} from '../../admin/services/faculty.service';
 
 @Component({
   selector: 'app-faculty',
@@ -34,7 +35,7 @@ import {
   standalone: true,
   styleUrl: './faculty.component.scss'
 })
-export class FacultyComponent {
+export class FacultyComponent  implements OnInit{
   faUserTie = faUserTie;
   faChalkboardTeacher = faChalkboardTeacher;
   faUsers = faUsers;
@@ -43,20 +44,12 @@ export class FacultyComponent {
 
   staff = [
     {
-      name: 'Mr. Arjun Minz',
-      designation: 'PGT Science',
-      category: 'teaching',
-      image: 'assets/faculty/arjun.jpg',
-      bio: 'M.Sc. in Physics, B.Ed. 5 years teaching experience.'
-    },
-    {
-      name: 'Ms. Leela Kisku',
-      designation: 'Administrative Assistant',
-      category: 'non-teaching',
-      image: 'assets/faculty/leela.jpg',
-      bio: 'Handles all admin tasks. Joined in 2024.'
-    },
-    // Add more as needed...
+      name: '',
+      designation: '',
+      category: '',
+      image: '',
+      bio: ''
+    }
   ];
 
   selectedStaff: any = null;
@@ -76,5 +69,14 @@ export class FacultyComponent {
 
   setFilter(filter: string) {
     this.filter = filter;
+  }
+
+  constructor(private facultyService: FacultyService) {
+  }
+
+  ngOnInit(): void {
+    this.facultyService.getAllFaculty().subscribe(data => {
+      this.staff = data;
+    });
   }
 }

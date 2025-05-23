@@ -1,0 +1,37 @@
+<div class="flex h-screen overflow-hidden">
+  <!-- Sidebar -->
+  <aside class="w-64 bg-gradient-to-b from-gray-900 to-gray-800 text-white flex flex-col shadow-lg">
+    <div class="p-6 border-b border-gray-700">
+      <h2 class="text-2xl font-bold tracking-wide">Admin Panel</h2>
+    </div>
+
+    <nav class="flex-1 overflow-y-auto px-4 py-6 space-y-2">
+      <a routerLink="/admin/dashboard" routerLinkActive="bg-gray-700" class="flex items-center gap-3 px-4 py-2 rounded hover:bg-gray-700 transition">
+        <fa-icon [icon]="faHome"></fa-icon> Dashboard
+      </a>
+      <a routerLink="/admin/manage-documents" routerLinkActive="bg-gray-700" class="flex items-center gap-3 px-4 py-2 rounded hover:bg-gray-700 transition">
+        <fa-icon [icon]="faBullhorn"></fa-icon> Manage Documents
+      </a>
+      <a routerLink="/admin/gallery" routerLinkActive="bg-gray-700" class="flex items-center gap-3 px-4 py-2 rounded hover:bg-gray-700 transition">
+        <fa-icon [icon]="faImages"></fa-icon> Upload Gallery
+      </a>
+      <a routerLink="/admin/contact" routerLinkActive="bg-gray-700" class="flex items-center gap-3 px-4 py-2 rounded hover:bg-gray-700 transition">
+        <fa-icon [icon]="faContactBook"></fa-icon> Manage Contact
+      </a>
+      <a routerLink="/admin/hoa-documents" routerLinkActive="bg-gray-700" class="flex items-center gap-3 px-4 py-2 rounded hover:bg-gray-700 transition">
+        <fa-icon [icon]="faPeopleGroup"></fa-icon> Manage HOA
+      </a>
+    </nav>
+
+    <div class="p-4 border-t border-gray-700">
+      <button (click)="logout()" class="flex items-center gap-2 text-red-400 hover:text-red-600 transition w-full">
+        <fa-icon [icon]="faSignOutAlt" class="w-5"></fa-icon> Logout
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="flex-1 overflow-y-auto bg-gray-100 p-6 animate__animated animate__fadeIn">
+    <router-outlet></router-outlet>
+  </main>
+</div>

@@ -1,5 +1,5 @@
 <section class="bg-gray-50 py-12">
-  <div class="container mx-auto px-4">
+  <div class="container max-w-7xl mx-auto ">
     <div class="grid lg:grid-cols-3 gap-6">
 
       <!-- Notice Board -->
@@ -14,6 +14,15 @@
               More <fa-icon [icon]="faArrowRight" class="text-sm"></fa-icon>
             </a>
           </div>
+          <!-- Loader while fetching notices -->
+          <ng-container *ngIf="isLoadingNotice; else showNotices">
+            <ul class="space-y-2">
+            <li class="flex items-center gap-2" *ngFor="let skeleton of skeletonArray">
+              <div class="h-4 bg-gray-200 rounded w-3/4 animate-pulse"></div>
+            </li>
+            </ul>
+          </ng-container>
+          <ng-template #showNotices>
           <!-- Inside Notice Board -->
           <div class="overflow-hidden h-20 relative">
             <ul
@@ -30,6 +39,7 @@
               </li>
             </ul>
           </div>
+          </ng-template>
         </div>
 
         <!-- Lecture Notes -->
@@ -43,6 +53,15 @@
               More <fa-icon [icon]="faArrowRight" class="text-sm"></fa-icon>
             </a>
           </div>
+          <!-- Loader while fetching notices -->
+          <ng-container *ngIf="isLoadingNotes; else showNotes">
+            <ul class="space-y-2">
+              <li class="flex items-center gap-2" *ngFor="let skeleton of skeletonArray">
+                <div class="h-4 bg-gray-200 rounded w-3/4 animate-pulse"></div>
+              </li>
+            </ul>
+          </ng-container>
+          <ng-template #showNotes>
           <div class="overflow-hidden h-20 relative">
             <ul
               [ngClass]="{
@@ -58,6 +77,7 @@
               </li>
             </ul>
           </div>
+          </ng-template>
         </div>
       </div>
 
@@ -72,6 +92,15 @@
             More <fa-icon [icon]="faArrowRight" class="text-sm"></fa-icon>
           </a>
         </div>
+        <!-- Loader while fetching notices -->
+        <ng-container *ngIf="isLoadingTender; else showTenders">
+          <ul class="space-y-2">
+            <li class="flex items-center gap-2" *ngFor="let skeleton of skeletonArray">
+              <div class="h-4 bg-gray-200 rounded w-3/4 animate-pulse"></div>
+            </li>
+          </ul>
+        </ng-container>
+        <ng-template #showTenders>
         <div class="overflow-hidden h-[285px] relative">
           <ul
             [ngClass]="{
@@ -87,8 +116,8 @@
             </li>
           </ul>
         </div>
+        </ng-template>
       </div>
-
     </div>
   </div>
 </section>

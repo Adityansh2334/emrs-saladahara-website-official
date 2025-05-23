@@ -1,0 +1,62 @@
+<!-- Image Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-6">
+  <div
+    *ngFor="let url of paginatedImages"
+    class="group relative bg-white p-4 rounded-2xl shadow-lg border border-gray-200 hover:shadow-xl transition"
+  >
+    <img
+      [src]="url"
+      alt="Uploaded banner"
+      class="rounded-xl w-full h-48 object-cover object-top transition duration-300 group-hover:scale-[1.02]"
+    />
+
+    <div class="flex justify-end gap-4 mt-4">
+      <button
+        (click)="onDownload(url)"
+        class="text-blue-600 hover:text-blue-800 transition-colors"
+        title="Download"
+      >
+        <fa-icon [icon]="faDownload" class="text-lg"></fa-icon>
+      </button>
+      <button
+        (click)="onDelete(url)"
+        class="text-red-600 hover:text-red-800 transition-colors"
+        title="Delete"
+      >
+        <fa-icon [icon]="faTrash" class="text-lg"></fa-icon>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Pagination Controls -->
+<div *ngIf="totalPages > 1" class="flex justify-center items-center mt-6 gap-2">
+  <button
+    (click)="goToPage(currentPage - 1)"
+    [disabled]="currentPage === 1"
+    class="px-3 py-1 rounded-md border bg-gray-100 hover:bg-gray-200 disabled:opacity-50"
+  >
+    Prev
+  </button>
+
+  <ng-container *ngFor="let page of [].constructor(totalPages); let i = index">
+    <button
+      (click)="goToPage(i + 1)"
+      [ngClass]="{
+        'bg-blue-600 text-white': currentPage === i + 1,
+        'bg-gray-100 hover:bg-gray-200': currentPage !== i + 1
+      }"
+      class="px-3 py-1 rounded-md border"
+    >
+      {{ i + 1 }}
+    </button>
+  </ng-container>
+
+  <button
+    (click)="goToPage(currentPage + 1)"
+    [disabled]="currentPage === totalPages"
+    class="px-3 py-1 rounded-md border bg-gray-100 hover:bg-gray-200 disabled:opacity-50"
+  >
+    Next
+  </button>
+</div>

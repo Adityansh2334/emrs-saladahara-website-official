@@ -8,6 +8,8 @@ import express from 'express';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+global.API_URL = process.env['API_URL'] || 'http://localhost:8080';
+
 const serverDistFolder = dirname(fileURLToPath(import.meta.url));
 const browserDistFolder = resolve(serverDistFolder, '../browser');
 
@@ -40,26 +42,30 @@ app.use(
 /**
  * Handle all other requests by rendering the Angular application.
  */
-app.use('/**', (req, res, next) => {
-  angularApp
-    .handle(req)
-    .then((response) =>
-      response ? writeResponseToNodeResponse(response, res) : next(),
-    )
-    .catch(next);
+app.get('*', async (req, res, next) => {
+  try {
+    const response = await angularApp.handle(req);
+    if (response) {
+      await writeResponseToNodeResponse(response, res);
+    } else {
+      next();
+    }
+  } catch (error) {
+    next(error);
+  }
 });
+
 
 /**
  * Start the server if this module is the main entry point.
  * The server listens on the port defined by the `PORT` environment variable, or defaults to 4000.
  */
 if (isMainModule(import.meta.url)) {
-  const port = process.env['PORT'] || 4000;
+  const port = process.env['PORT'] || 8080;
   app.listen(port, () => {
     console.log(`Node Express server listening on http://localhost:${port}`);
   });
 }
-
 /**
  * Request handler used by the Angular CLI (for dev-server and during build) or Firebase Cloud Functions.
  */

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ImageViewerComponent} from '../../components/image-viewer/image-viewer.component';
 import {NgForOf, NgIf} from '@angular/common';
 import {BreadcrumbsStyleComponent} from '../../components/breadcrumbs-style/breadcrumbs-style.component';
@@ -8,6 +8,7 @@ import {
   style,
   animate
 } from '@angular/animations';
+import {GeneralGalleryService} from '../../admin/services/general-gallery.service';
 
 @Component({
   selector: 'app-gallery',
@@ -27,38 +28,17 @@ import {
   standalone: true,
   styleUrl: './gallery.component.scss'
 })
-export class GalleryComponent {
+export class GalleryComponent  implements OnInit{
   activeSection: any = null;
 
   gallerySections = [
     {
-      title: 'Library',
-      coverImage: 'emrs (1).jpg',
+      title: '',
+      coverImage: '',
       images: [
-        'emrs (1).jpg',
-        'emrs (1).jpg',
-        'emrs (1).jpg',
+        ''
       ],
-    },
-    {
-      title: 'Hostel Life',
-      coverImage: 'emrs (1).jpg',
-      images: [
-        'emrs (1).jpg',
-        'emrs (1).jpg',
-        'emrs (1).jpg',
-      ],
-    },
-    {
-      title: 'Events',
-      coverImage: 'emrs (1).jpg',
-      images: [
-        'emrs (1).jpg',
-        'emrs (1).jpg',
-        'emrs (1).jpg',
-      ],
-    },
-    // Add more sections as needed
+    }
   ];
 
   openModal(section: any) {
@@ -88,5 +68,14 @@ export class GalleryComponent {
       this.selectedImageIndex = index;
       this.isViewerOpen = true;
     }
+  }
+
+  constructor(private galleryService: GeneralGalleryService) {
+  }
+
+  ngOnInit(): void {
+    this.galleryService.getAllGalleries().subscribe(data => {
+      this.gallerySections = data;
+    });
   }
 }

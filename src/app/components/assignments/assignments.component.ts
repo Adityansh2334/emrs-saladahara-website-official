@@ -2,6 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {NgClass, NgForOf, NgIf} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {NgSelectComponent} from '@ng-select/ng-select';
+import {Assignment, AssignmentService} from '../../admin/services/assignment.service';
+import {TableLoaderComponent} from '../../admin/shared/table-loader/table-loader.component';
 
 @Component({
   selector: 'app-assignments',
@@ -12,7 +14,8 @@ import {NgSelectComponent} from '@ng-select/ng-select';
     FormsModule,
     NgSelectComponent,
     NgClass,
-    NgIf
+    NgIf,
+    TableLoaderComponent
   ],
   styleUrls: ['./assignments.component.scss']
 })
@@ -24,132 +27,12 @@ export class AssignmentsComponent implements OnInit {
 
   assignments = [
     {
-      class: '8',
-      subject: 'Science',
-      title: 'Human Body Assignment',
-      teacher: 'Mrs. Roy',
-      dueDate: '2025-05-10',
-      fileUrl: '/assets/assignments/human-body.pdf',
-    },
-    {
-      class: '9',
-      subject: 'Mathematics',
-      title: 'Algebra Worksheet',
-      teacher: 'Mr. Das',
-      dueDate: '2025-05-12',
-      fileUrl: '/assets/assignments/algebra.pdf',
-    },
-    {
-      class: '8',
-      subject: 'Science',
-      title: 'Human Body Assignment',
-      teacher: 'Mrs. Roy',
-      dueDate: '2025-05-10',
-      fileUrl: '/assets/assignments/human-body.pdf',
-    },
-    {
-      class: '9',
-      subject: 'Mathematics',
-      title: 'Algebra Worksheet',
-      teacher: 'Mr. Das',
-      dueDate: '2025-05-12',
-      fileUrl: '/assets/assignments/algebra.pdf',
-    },
-    {
-      class: '8',
-      subject: 'Science',
-      title: 'Human Body Assignment',
-      teacher: 'Mrs. Roy',
-      dueDate: '2025-05-10',
-      fileUrl: '/assets/assignments/human-body.pdf',
-    },
-    {
-      class: '9',
-      subject: 'Mathematics',
-      title: 'Algebra Worksheet',
-      teacher: 'Mr. Das',
-      dueDate: '2025-05-12',
-      fileUrl: '/assets/assignments/algebra.pdf',
-    },
-    {
-      class: '8',
-      subject: 'Science',
-      title: 'Human Body Assignment',
-      teacher: 'Mrs. Roy',
-      dueDate: '2025-05-10',
-      fileUrl: '/assets/assignments/human-body.pdf',
-    },
-    {
-      class: '9',
-      subject: 'Mathematics',
-      title: 'Algebra Worksheet',
-      teacher: 'Mr. Das',
-      dueDate: '2025-05-12',
-      fileUrl: '/assets/assignments/algebra.pdf',
-    },
-    {
-      class: '8',
-      subject: 'Science',
-      title: 'Human Body Assignment',
-      teacher: 'Mrs. Roy',
-      dueDate: '2025-05-10',
-      fileUrl: '/assets/assignments/human-body.pdf',
-    },
-    {
-      class: '9',
-      subject: 'Mathematics',
-      title: 'Algebra Worksheet',
-      teacher: 'Mr. Das',
-      dueDate: '2025-05-12',
-      fileUrl: '/assets/assignments/algebra.pdf',
-    },
-    {
-      class: '8',
-      subject: 'Science',
-      title: 'Human Body Assignment',
-      teacher: 'Mrs. Roy',
-      dueDate: '2025-05-10',
-      fileUrl: '/assets/assignments/human-body.pdf',
-    },
-    {
-      class: '9',
-      subject: 'Mathematics',
-      title: 'Algebra Worksheet',
-      teacher: 'Mr. Das',
-      dueDate: '2025-05-12',
-      fileUrl: '/assets/assignments/algebra.pdf',
-    },
-    {
-      class: '8',
-      subject: 'Science',
-      title: 'Human Body Assignment',
-      teacher: 'Mrs. Roy',
-      dueDate: '2025-05-10',
-      fileUrl: '/assets/assignments/human-body.pdf',
-    },
-    {
-      class: '9',
-      subject: 'Mathematics',
-      title: 'Algebra Worksheet',
-      teacher: 'Mr. Das',
-      dueDate: '2025-05-12',
-      fileUrl: '/assets/assignments/algebra.pdf',
-    },
-    {
-      class: '8',
-      subject: 'Science',
-      title: 'Human Body Assignment',
-      teacher: 'Mrs. Roy',
-      dueDate: '2025-05-10',
-      fileUrl: '/assets/assignments/human-body.pdf',
-    },
-    {
-      class: '9',
-      subject: 'Mathematics',
-      title: 'Algebra Worksheet',
-      teacher: 'Mr. Das',
-      dueDate: '2025-05-12',
-      fileUrl: '/assets/assignments/algebra.pdf',
+      class: '',
+      subject: '',
+      title: '',
+      teacher: '',
+      dueDate: '',
+      fileUrl: ''
     }
   ];
 
@@ -159,19 +42,43 @@ export class AssignmentsComponent implements OnInit {
   selectedClass: null = null;
   selectedSubject: null = null;
   searchTitle: string = '';
+  loading = false;
+
+  constructor(private assignmentService: AssignmentService) {}
 
   ngOnInit(): void {
-    this.classList = [...new Set(this.assignments.map(a => a.class))].map(c => ({
-      label: "Class " + c,
-      value: c,
-    }));
+    this.loading = true;
+    this.assignmentService.getAssignments().subscribe(data => {
+      let assignmentsDb: { class: string; subject: string; title: string; teacher: string; dueDate: string; fileUrl: string; }[] = [];
+      data.forEach(assignment => {
+        assignmentsDb.push({
+          class: assignment.classLevel,
+          subject: assignment.subject,
+          title: assignment.title,
+          teacher: assignment.teacher,
+          dueDate: assignment.dueDate,
+          fileUrl: assignment.fileUrl
+        });
+      });
+      this.assignments = assignmentsDb;
+      console.log('Fetched Assignments:', this.assignments);
 
-    this.subjectList = [...new Set(this.assignments.map(a => a.subject))].map(s => ({
-      label: s,  // Just the subject name, no "Class" prefix here
-      value: s,
-    }));
-    this.updateAssignmentPagination();
+      // ✅ Now move below logic inside subscribe
+      this.classList = [...new Set(this.assignments.map(a => a.class))].map(c => ({
+        label: "Class " + c,
+        value: c,
+      }));
+
+      this.subjectList = [...new Set(this.assignments.map(a => a.subject))].map(s => ({
+        label: s,
+        value: s,
+      }));
+
+      this.updateAssignmentPagination();
+      this.loading = false;
+    });
   }
+
 
   /**
    * Filter the assignments based on the selected class, subject, and search title.

@@ -3,13 +3,14 @@
 
 <app-top-bar></app-top-bar>
 <app-main-bar></app-main-bar>
-<app-navbar></app-navbar>
+<app-navbar *ngIf="showLayout"></app-navbar>
 <app-image-scroller *ngIf="isHomePage"></app-image-scroller>
 <app-about-section *ngIf="isHomePage"></app-about-section>
 <app-notification-board *ngIf="isHomePage"></app-notification-board>
 <app-achievement-glance *ngIf="isHomePage"></app-achievement-glance>
+<app-toast></app-toast>
 <router-outlet></router-outlet>
-<app-above-footer></app-above-footer>
+<app-above-footer *ngIf="showLayout"></app-above-footer>
 <app-footer></app-footer>
 <!-- Scroll Control Arrows -->
 <div *ngIf="showScrollArrows" class="fixed bottom-6 right-6 flex flex-col items-center z-50 space-y-3">

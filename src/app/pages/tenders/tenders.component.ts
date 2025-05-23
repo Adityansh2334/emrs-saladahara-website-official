@@ -2,26 +2,27 @@ import { Component, OnInit } from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {BreadcrumbsStyleComponent} from '../../components/breadcrumbs-style/breadcrumbs-style.component';
 import {NgForOf, NgIf} from '@angular/common';
+import {TenderService} from '../../admin/services/tender.service';
+import {TableLoaderComponent} from "../../admin/shared/table-loader/table-loader.component";
 
 @Component({
   selector: 'app-tenders',
   templateUrl: './tenders.component.html',
   standalone: true,
-  imports: [
-    FormsModule,
-    BreadcrumbsStyleComponent,
-    NgForOf,
-    NgIf
-  ],
+    imports: [
+        FormsModule,
+        BreadcrumbsStyleComponent,
+        NgForOf,
+        NgIf,
+        TableLoaderComponent
+    ],
   styleUrls: ['./tenders.component.scss']
 })
 export class TendersComponent implements OnInit {
   searchQuery: string = '';
+  loading = false;
   tenders = [
-    { title: 'Construction Tender - Phase 1', date: '2025-05-01', fileUrl: '/assets/tenders/tender1.pdf' },
-    { title: 'Canteen Contract Notice', date: '2025-04-28', fileUrl: '/assets/tenders/tender2.pdf' },
-    { title: 'Furniture Supply Tender', date: '2025-04-20', fileUrl: '/assets/tenders/tender3.pdf' }
-    // Add more tenders here
+    { title: '', date: '', fileUrl: '' }
   ];
 
   get filteredTenders() {
@@ -30,7 +31,25 @@ export class TendersComponent implements OnInit {
     );
   }
 
-  constructor() {}
+  constructor(private tendersService: TenderService ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.loading = true;
+    this.tendersService.getAllDocuments().subscribe(docs => {
+      let tenders : { title: string; date: string; fileUrl: string }[] = [];
+      docs.forEach(doc => {
+        tenders.push({
+          title: doc.title,
+          date: doc.date,
+          fileUrl: doc.fileUrl||''
+        });
+      });
+      this.tenders = tenders.sort((a, b) => {
+        const dateA = new Date(a.date);
+        const dateB = new Date(b.date);
+        return dateB.getTime() - dateA.getTime();
+      });
+      this.loading = false;
+    });
+  }
 }
