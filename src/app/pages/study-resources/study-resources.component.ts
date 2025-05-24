@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {NgForOf, NgIf} from '@angular/common';
 import {BreadcrumbsStyleComponent} from '../../components/breadcrumbs-style/breadcrumbs-style.component';
+import {animate, style, transition, trigger} from '@angular/animations';
 
 @Component({
   selector: 'app-study-resources',
@@ -10,6 +11,14 @@ import {BreadcrumbsStyleComponent} from '../../components/breadcrumbs-style/brea
     NgForOf,
     NgIf,
     BreadcrumbsStyleComponent
+  ],
+  animations: [
+    trigger('fadeInUp', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translateY(40px)' }),
+        animate('600ms ease-out', style({ opacity: 1, transform: 'translateY(0)' })),
+      ]),
+    ])
   ],
   styleUrls: ['./study-resources.component.scss']
 })

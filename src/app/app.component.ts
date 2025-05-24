@@ -26,6 +26,7 @@ import {ToastComponent} from './admin/shared/toast/toast.component';
   standalone: true,
   styleUrl: './app.component.scss'
 })
+
 export class AppComponent implements OnInit {
   showLayout = true;
   // existing properties...
@@ -59,12 +60,27 @@ export class AppComponent implements OnInit {
       this.isLoading = false;
     });
 
-    // Optional: scroll to top on navigation
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
-      .subscribe(() => {
+      .subscribe((event: NavigationEnd) => {
         if (isPlatformBrowser(this.platformId)) {
-          window.scrollTo(0, 0);
+          const isMobile = window.innerWidth <= 768;
+
+          if (isMobile) {
+            // Only scroll if NOT home page
+            const isHome = event.urlAfterRedirects === '/' || event.urlAfterRedirects === '/home';
+            if (!isHome) {
+              setTimeout(() => {
+                const el = document.getElementById('mainContentStart');
+                if (el) {
+                  el.scrollIntoView({ behavior: 'smooth' });
+                }
+              }, 100);
+            }
+          } else {
+            // Scroll to top for desktop
+            window.scrollTo({ top: 0, behavior: 'auto' });
+          }
         }
       });
   }

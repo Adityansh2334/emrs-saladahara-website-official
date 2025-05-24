@@ -29,6 +29,12 @@ import {FacultyService} from '../../admin/services/faculty.service';
       transition(':leave', [ // when *ngIf removes the element
         animate('200ms ease-in', style({ opacity: 0 }))
       ])
+    ]),
+    trigger('fadeInUp', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translateY(40px)' }),
+        animate('600ms ease-out', style({ opacity: 1, transform: 'translateY(0)' })),
+      ]),
     ])
   ],
   templateUrl: './faculty.component.html',

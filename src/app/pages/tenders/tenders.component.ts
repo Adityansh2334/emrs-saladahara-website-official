@@ -4,6 +4,7 @@ import {BreadcrumbsStyleComponent} from '../../components/breadcrumbs-style/brea
 import {NgForOf, NgIf} from '@angular/common';
 import {TenderService} from '../../admin/services/tender.service';
 import {TableLoaderComponent} from "../../admin/shared/table-loader/table-loader.component";
+import {animate, style, transition, trigger} from '@angular/animations';
 
 @Component({
   selector: 'app-tenders',
@@ -16,6 +17,14 @@ import {TableLoaderComponent} from "../../admin/shared/table-loader/table-loader
         NgIf,
         TableLoaderComponent
     ],
+  animations: [
+    trigger('fadeInUp', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translateY(40px)' }),
+        animate('600ms ease-out', style({ opacity: 1, transform: 'translateY(0)' })),
+      ]),
+    ]),
+  ],
   styleUrls: ['./tenders.component.scss']
 })
 export class TendersComponent implements OnInit {

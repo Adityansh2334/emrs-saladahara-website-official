@@ -1,9 +1,9 @@
 <app-breadcrumbs-style pageName="Faculty"></app-breadcrumbs-style>
-<div class="container mx-auto px-4 py-8">
+<div class="container mx-auto px-4 py-8" [@fadeInUp]>
   <h2 class="text-3xl font-bold text-center text-blue-800 mb-6">Meet Our Faculty & Staff</h2>
 
   <!-- Filters -->
-  <div class="flex justify-center flex-wrap gap-3 mb-8">
+  <div class="flex justify-center flex-wrap gap-3 mb-8" [@fadeInUp]>
     <button
       (click)="setFilter('all')"
       [ngClass]="filter === 'all' ? 'bg-blue-700 text-white' : 'bg-white text-blue-700 border border-blue-500'"
@@ -29,7 +29,7 @@
 
 
   <!-- Cards Grid -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" [@fadeInUp]>
     <div *ngFor="let member of filteredStaff"
          class="bg-white shadow-lg rounded-xl p-4 text-center hover:shadow-2xl transition duration-300">
       <img [lazyLoad]="member.image" [defaultImage]="'assets/faculty/placeholder.jpg'" alt="{{ member.name }}"

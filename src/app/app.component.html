@@ -9,9 +9,12 @@
 <app-notification-board *ngIf="isHomePage"></app-notification-board>
 <app-achievement-glance *ngIf="isHomePage"></app-achievement-glance>
 <app-toast></app-toast>
+<!-- Add an ID to scroll to this anchor -->
+<div id="mainContentStart"></div>
 <router-outlet></router-outlet>
 <app-above-footer *ngIf="showLayout"></app-above-footer>
 <app-footer></app-footer>
+
 <!-- Scroll Control Arrows -->
 <div *ngIf="showScrollArrows" class="fixed bottom-6 right-6 flex flex-col items-center z-50 space-y-3">
   <!-- Down Arrow: Only show when NOT at bottom -->

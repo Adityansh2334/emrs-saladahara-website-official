@@ -1,13 +1,26 @@
 <div class="bg-gray-800 text-white text-sm py-2">
-  <div class="container mx-auto max-w-7xl flex flex-wrap justify-between items-center">
-    <ul class="flex space-x-3">
+  <div class="container mx-auto max-w-7xl px-4 flex flex-col sm:flex-row sm:justify-between items-center space-y-2 sm:space-y-0">
+
+    <!-- Social Icons -->
+    <ul class="flex space-x-4 justify-center sm:justify-start">
       <li><a href="https://facebook.com" target="_blank"><fa-icon [icon]="faFacebook"></fa-icon></a></li>
       <li><a href="https://twitter.com" target="_blank"><fa-icon [icon]="faTwitter"></fa-icon></a></li>
       <li><a href="https://google.com" target="_blank"><fa-icon [icon]="faGooglePlusG"></fa-icon></a></li>
     </ul>
-    <ul class="flex space-x-6">
-      <li><a href="#"><fa-icon [icon]="faPhone" class="mr-1"></fa-icon> {{phoneNumber}}</a></li>
-      <li><a href="#"><fa-icon [icon]="faEnvelope" class="mr-1"></fa-icon> {{email}}</a></li>
+
+    <!-- Contact Info -->
+    <ul class="flex flex-col sm:flex-row sm:space-x-6 text-center sm:text-right break-words">
+      <li class="truncate sm:max-w-xs md:max-w-sm lg:max-w-md">
+        <a href="tel:{{phoneNumber}}">
+          <fa-icon [icon]="faPhone" class="mr-1"></fa-icon> {{phoneNumber}}
+        </a>
+      </li>
+      <li class="truncate sm:max-w-xs md:max-w-sm lg:max-w-md">
+        <a href="mailto:{{email}}">
+          <fa-icon [icon]="faEnvelope" class="mr-1"></fa-icon> {{email}}
+        </a>
+      </li>
     </ul>
+
   </div>
 </div>

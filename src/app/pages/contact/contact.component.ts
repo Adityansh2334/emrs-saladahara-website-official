@@ -5,6 +5,7 @@ import {BreadcrumbsStyleComponent} from '../../components/breadcrumbs-style/brea
 import {FaIconComponent} from '@fortawesome/angular-fontawesome';
 import { faMapMarkerAlt, faEnvelopeOpenText, faCity, faFlag, faLocationCrosshairs,faPhone, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import {ContactService} from '../../admin/services/contact.service';
+import {animate, style, transition, trigger} from '@angular/animations';
 
 @Component({
   selector: 'app-contact',
@@ -15,6 +16,14 @@ import {ContactService} from '../../admin/services/contact.service';
     NgForOf,
     BreadcrumbsStyleComponent,
     FaIconComponent
+  ],
+  animations: [
+    trigger('fadeInUp', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translateY(40px)' }),
+        animate('600ms ease-out', style({ opacity: 1, transform: 'translateY(0)' })),
+      ]),
+    ]),
   ],
   standalone: true
 })

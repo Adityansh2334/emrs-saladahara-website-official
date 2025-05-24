@@ -4,13 +4,13 @@
   <div class="max-w-7xl mx-auto">
 
     <!-- Hero Section -->
-    <div class="text-center mb-12">
+    <div class="text-center mb-12" [@fadeInUp]>
       <h1 class="text-4xl font-bold text-blue-800 mb-2">📚 Study Resources & Materials</h1>
       <p class="text-lg text-gray-600">Your Gateway to Academic Success</p>
     </div>
 
     <!-- Tab Navigation -->
-    <div class="flex justify-center mb-10">
+    <div class="flex justify-center mb-10" [@fadeInUp]>
       <button
         (click)="setActiveTab('textbooks')"
         [class.bg-blue-700]="activeTab === 'textbooks'"
@@ -41,10 +41,10 @@
     </div>
 
     <!-- Tab Content -->
-    <div class="tab-content">
+    <div class="tab-content" [@fadeInUp]>
 
       <!-- Textbooks Tab -->
-      <div *ngIf="activeTab === 'textbooks'" class="space-y-8">
+      <div *ngIf="activeTab === 'textbooks'" class="space-y-8" [@fadeInUp]>
         <h2 class="text-2xl font-semibold text-blue-700 mb-4">Download Textbooks</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           <div *ngFor="let textbook of textbooks" class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg">
@@ -58,7 +58,7 @@
       </div>
 
       <!-- Practice Papers Tab -->
-      <div *ngIf="activeTab === 'practicePapers'" class="space-y-8">
+      <div *ngIf="activeTab === 'practicePapers'" class="space-y-8" [@fadeInUp]>
         <h2 class="text-2xl font-semibold text-blue-700 mb-4">Practice Papers</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           <div *ngFor="let paper of practicePapers" class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg">
@@ -72,7 +72,7 @@
       </div>
 
       <!-- Free Learning Resources Tab -->
-      <div *ngIf="activeTab === 'learningResources'" class="space-y-8">
+      <div *ngIf="activeTab === 'learningResources'" class="space-y-8" [@fadeInUp]>
         <h2 class="text-2xl font-semibold text-blue-700 mb-4">Free Learning Resources</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg">
