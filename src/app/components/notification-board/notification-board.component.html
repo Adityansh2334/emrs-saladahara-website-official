@@ -10,9 +10,13 @@
               <fa-icon [icon]="faBullhorn" class="text-blue-600 text-3xl"></fa-icon>
               <h2 class="text-xl font-semibold text-gray-800">Notice Board</h2>
             </div>
-            <a routerLink="/notice" class="text-blue-600 hover:underline flex items-center gap-1">
-              More <fa-icon [icon]="faArrowRight" class="text-sm"></fa-icon>
-            </a>
+            <button
+              routerLink="/notice"
+              class="inline-flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white font-semibold rounded-full shadow-md hover:bg-blue-700 transition duration-300 group"
+            >
+              More
+              <fa-icon [icon]="faArrowRight" class="text-base transform group-hover:translate-x-1 transition duration-300"></fa-icon>
+            </button>
           </div>
           <!-- Loader while fetching notices -->
           <ng-container *ngIf="isLoadingNotice; else showNotices">
@@ -49,9 +53,13 @@
               <fa-icon [icon]="faBookOpen" class="text-green-600 text-3xl"></fa-icon>
               <h2 class="text-xl font-semibold text-gray-800">Lecture Notes</h2>
             </div>
-            <a routerLink="/lecture-notes" class="text-blue-600 hover:underline flex items-center gap-1">
-              More <fa-icon [icon]="faArrowRight" class="text-sm"></fa-icon>
-            </a>
+            <button
+              routerLink="/lecture-notes"
+              class="inline-flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white font-semibold rounded-full shadow-md hover:bg-blue-700 transition duration-300 group"
+            >
+              More
+              <fa-icon [icon]="faArrowRight" class="text-base transform group-hover:translate-x-1 transition duration-300"></fa-icon>
+            </button>
           </div>
           <!-- Loader while fetching notices -->
           <ng-container *ngIf="isLoadingNotes; else showNotes">
@@ -88,9 +96,13 @@
             <fa-icon [icon]="faFileContract" class="text-yellow-600 text-3xl"></fa-icon>
             <h2 class="text-xl font-semibold text-gray-800">Tenders</h2>
           </div>
-          <a routerLink="/tenders" class="text-blue-600 hover:underline flex items-center gap-1">
-            More <fa-icon [icon]="faArrowRight" class="text-sm"></fa-icon>
-          </a>
+          <button
+            routerLink="/tenders"
+            class="inline-flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white font-semibold rounded-full shadow-md hover:bg-blue-700 transition duration-300 group"
+          >
+            More
+            <fa-icon [icon]="faArrowRight" class="text-base transform group-hover:translate-x-1 transition duration-300"></fa-icon>
+          </button>
         </div>
         <!-- Loader while fetching notices -->
         <ng-container *ngIf="isLoadingTender; else showTenders">
