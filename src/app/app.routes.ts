@@ -27,6 +27,7 @@ import {DashboardComponent} from './admin/dashboard/dashboard.component';
 import {NotAuthorizedComponent} from './pages/not-authorized/not-authorized.component';
 import {AdminLayoutComponent} from './components/admin-layout/admin-layout.component';
 import {PageUnderConstructionComponent} from './components/page-under-construction/page-under-construction.component';
+import {PasswordResetComponent} from './admin/login/password-reset/password-reset.component';
 
 
 export const routes: Routes = [
@@ -54,6 +55,7 @@ export const routes: Routes = [
   { path: 'page-under-construction', component: PageUnderConstructionComponent },
   { path: 'admin', component: NotAuthorizedComponent },
   { path: 'admin/login', component: LoginComponent },
+  { path: 'admin/reset-password', component: PasswordResetComponent },
   // Admin Routes wrapped with AdminLayout
   {
     path: 'admin',

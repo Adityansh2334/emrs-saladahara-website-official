@@ -1,21 +1,26 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {ToastService} from '../services/toast.service';
 import {AuthService} from '../services/auth.service';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import {FaIconComponent} from '@fortawesome/angular-fontawesome';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, FaIconComponent, RouterLink],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
   username = '';
   password = '';
+  showPassword = false;
   loading = false;
+  faEye = faEye;
+  faEyeSlash = faEyeSlash;
 
   constructor(private router: Router, private toastService: ToastService, private authService: AuthService) {}
 

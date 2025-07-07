@@ -1,0 +1,1 @@
+web: node dist/emrs-saladahara-website/server/server.mjs
