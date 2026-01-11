@@ -1,12 +1,8 @@
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { catchError, Observable, tap, throwError } from 'rxjs';
+import { catchError, Observable, throwError } from 'rxjs';
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { environment } from '../../../environments/environment';
-
-export interface AuthResponse {
-  token: string;
-}
 
 export interface OtpResponse {
   success: boolean;
@@ -15,7 +11,6 @@ export interface OtpResponse {
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private tokenKey = 'adminToken';
   private baseUrl = '';
 
   constructor(private http: HttpClient, @Inject(PLATFORM_ID) private platformId: Object) {
@@ -27,65 +22,56 @@ export class AuthService {
     this.baseUrl += '/api/admin';
   }
 
-  /** ✅ Login and store JWT */
-  login(username: string, password: string): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.baseUrl}/login`, { username, password }).pipe(
-      tap(res => {
-        localStorage.setItem(this.tokenKey, res.token);
-      }),
-      catchError(this.handleError)
-    );
+  /** ✅ Login (cookie-based) */
+  login(username: string, password: string): Observable<any> {
+    return this.http.post(`${this.baseUrl}/login`, { username, password }, { withCredentials: true })
+      .pipe(catchError(this.handleError));
   }
 
-  /** ✅ Send OTP to official email */
+  /** ✅ Logout (clears cookie) */
+  logout(): Observable<any> {
+    return this.http.post(`${this.baseUrl}/logout`, {}, { withCredentials: true })
+      .pipe(catchError(this.handleError));
+  }
+
+  /** ✅ Check authentication (used by AuthGuard) */
+  checkAuth(): Observable<boolean> {
+    return this.http.get<boolean>(`${this.baseUrl}/check-auth`, { withCredentials: true })
+      .pipe(catchError(() => new Observable<boolean>(subscriber => subscriber.next(false))));
+  }
+
+  /** ✅ Send OTP */
   sendOtp(): Observable<OtpResponse> {
-    return this.http.get<OtpResponse>(`${this.baseUrl}/send-otp`)
+    return this.http.get<OtpResponse>(`${this.baseUrl}/send-otp`, { withCredentials: true })
       .pipe(catchError(this.handleError));
   }
 
   /** ✅ Verify OTP */
   verifyOtp(otp: string): Observable<OtpResponse> {
-    return this.http.post<OtpResponse>(`${this.baseUrl}/verify-otp`, { otp })
+    return this.http.post<OtpResponse>(`${this.baseUrl}/verify-otp`, { otp }, { withCredentials: true })
       .pipe(catchError(this.handleError));
   }
 
-  /** ✅ Update password after OTP is verified */
+  /** ✅ Update password after OTP verification */
   updatePassword(newPassword: string): Observable<OtpResponse> {
-    return this.http.post<OtpResponse>(`${this.baseUrl}/update-password`, { newPassword })
+    return this.http.post<OtpResponse>(`${this.baseUrl}/update-password`, { newPassword }, { withCredentials: true })
       .pipe(catchError(this.handleError));
-  }
-
-  /** ✅ Token management */
-  getToken(): string | null {
-    return isPlatformBrowser(this.platformId) ? localStorage.getItem(this.tokenKey) : null;
-  }
-
-  logout(): void {
-    localStorage.removeItem(this.tokenKey);
-  }
-
-  isLoggedIn(): boolean {
-    return !!this.getToken();
   }
 
   /** 🔴 Error handler */
   private handleError(error: HttpErrorResponse) {
     let errorMsg = 'An unknown error occurred';
-
     if (error.error instanceof ErrorEvent) {
       errorMsg = `Client Error: ${error.error.message}`;
+    } else if (error.status === 0) {
+      errorMsg = 'Backend is unreachable. Please check your connection.';
+    } else if (typeof error.error === 'string') {
+      errorMsg = error.error;
+    } else if (error.error?.message) {
+      errorMsg = error.error.message;
     } else {
-      if (error.status === 0) {
-        errorMsg = 'Backend is unreachable. Please check your connection.';
-      } else if (typeof error.error === 'string') {
-        errorMsg = error.error;
-      } else if (error.error?.message) {
-        errorMsg = error.error.message;
-      } else {
-        errorMsg = `Server Error: ${error.status} - ${error.statusText}`;
-      }
+      errorMsg = `Server Error: ${error.status} - ${error.statusText}`;
     }
-
     return throwError(() => new Error(errorMsg));
   }
 }

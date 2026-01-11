@@ -30,8 +30,9 @@ export class AdminLayoutComponent  implements OnInit{
 
 
   logout() {
-    this.authService.logout();
-    this.router.navigate(['/admin/login']);
+    this.authService.logout().subscribe(() => {
+      this.router.navigate(['/admin/login']);
+    });
   }
 
   ngOnInit(): void {
